@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routes import auth, kegiatan
+
+from api.routers import auth, kegiatan
+from api.internal import admin
 from api.database import Base, engine
 
 app = FastAPI()
@@ -22,3 +24,4 @@ def read_root():
 
 app.include_router(auth.router)
 app.include_router(kegiatan.router)
+app.include_router(admin.router)
