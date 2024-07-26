@@ -5,6 +5,6 @@ format:
 	black *py api/*py api/routes/*py
 
 run:
-	uvicorn main:app
+	uvicorn main:app --reload
 
 all: install format run
