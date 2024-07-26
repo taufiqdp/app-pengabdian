@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, Date, Boolean
 from sqlalchemy.orm import relationship
 from api.database import Base
 
@@ -43,6 +43,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String)
     password = Column(String)
+    is_admin = Column(Boolean, default=False)
 
 
 class Kegiatan(Base):

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from fastapi import APIRouter, status, UploadFile
+from fastapi import APIRouter, status, UploadFile, HTTPException
 from datetime import datetime
 
 from api.models import Kegiatan
@@ -19,6 +19,12 @@ class KegiatanCreateRequest(BaseModel):
 def create_kegiatan(
     kegiatan: KegiatanCreateRequest, db: db_dependency, user: user_dependency
 ):
+    if user["is_admin"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Admin cannot create kegiatan",
+        )
+
     new_kegiatan = Kegiatan(
         nama_kegiatan=kegiatan.nama_kegiatan,
         tanggal=kegiatan.tanggal,
@@ -34,8 +40,11 @@ def create_kegiatan(
 
 @router.get("/")
 def get_kegiatan(db: db_dependency, user: user_dependency):
-    kegiatan = db.query(Kegiatan).filter(Kegiatan.user_id == user["id"]).all()
-    if len(kegiatan) < 1:
-        return {"message": "No kegiatan found"}
+    if not user["is_admin"]:
+        kegiatan = db.query(Kegiatan).filter(Kegiatan.user_id == user["id"]).all()
+        if len(kegiatan) < 1:
+            return {"detail": "No kegiatan found"}
+    else:
+        kegiatan = db.query(Kegiatan).all()
 
     return kegiatan

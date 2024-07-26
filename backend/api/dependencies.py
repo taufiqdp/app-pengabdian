@@ -36,7 +36,11 @@ async def get_current_user(token: str = oauth2_scheme_dependency):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid authentication credentials",
             )
-        return {"username": username, "id": payload.get("id")}
+        return {
+            "username": username,
+            "id": payload.get("id"),
+            "is_admin": payload.get("is_admin"),
+        }
 
     except JWTError:
         raise HTTPException(
