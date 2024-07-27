@@ -45,6 +45,8 @@ class User(Base):
     password = Column(String)
     is_admin = Column(Boolean, default=False)
 
+    kegiatan = relationship("Kegiatan", back_populates="user")
+
 
 class Kegiatan(Base):
     __tablename__ = "kegiatan"
@@ -56,3 +58,5 @@ class Kegiatan(Base):
     deskripsi = Column(String)
 
     user_id = Column(Integer, ForeignKey("user.id"))
+
+    user = relationship("User", back_populates="kegiatan")

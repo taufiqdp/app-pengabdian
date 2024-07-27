@@ -35,6 +35,7 @@ def create_kegiatan(
     db.add(new_kegiatan)
     db.commit()
     db.refresh(new_kegiatan)
+
     return new_kegiatan
 
 
@@ -46,5 +47,24 @@ def get_kegiatan(db: db_dependency, user: user_dependency):
             return {"detail": "No kegiatan found"}
     else:
         kegiatan = db.query(Kegiatan).all()
-
     return kegiatan
+
+
+@router.delete("/{kegiatan_id}")
+def delete_kegiatan(kegiatan_id: int, db: db_dependency, user: user_dependency):
+    kegiatan = db.query(Kegiatan).filter(Kegiatan.id == kegiatan_id).first()
+    if not kegiatan:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Kegiatan not found"
+        )
+
+    if kegiatan.user_id != user["id"] and not user["is_admin"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not allowed to delete this kegiatan",
+        )
+
+    db.delete(kegiatan)
+    db.commit()
+
+    return {"detail": "Kegiatan deleted"}
