@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 
-from api.models import User, Kegiatan
-from api.dependencies import db_dependency, user_dependency
+from app.models import User, Kegiatan
+from app.dependencies import db_dependency, user_dependency
 
 
 router = APIRouter(prefix="/admin", tags=["admin"])

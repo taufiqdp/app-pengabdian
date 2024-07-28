@@ -2,8 +2,8 @@ from pydantic import BaseModel
 from fastapi import APIRouter, status, UploadFile, HTTPException
 from datetime import datetime
 
-from api.models import Kegiatan
-from api.dependencies import db_dependency, user_dependency
+from app.models import Kegiatan
+from app.dependencies import db_dependency, user_dependency
 
 router = APIRouter(prefix="/kegiatan", tags=["kegiatan"])
 

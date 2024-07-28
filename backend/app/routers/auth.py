@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 from typing import Annotated
 import os
 
-from api.models import User
-from api.dependencies import bcrypt_context, db_dependency
+from app.models import User
+from app.dependencies import bcrypt_context, db_dependency
 
 
 load_dotenv()
