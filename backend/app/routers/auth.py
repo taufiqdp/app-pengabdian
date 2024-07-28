@@ -3,7 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import jwt
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
+
 from typing import Annotated
 import os
 
@@ -11,12 +12,12 @@ from app.models import User
 from app.dependencies import bcrypt_context, db_dependency
 
 
-load_dotenv()
+load_dotenv(find_dotenv())
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
-
+print(SECRET_KEY, ALGORITHM)
 
 class UserCreateRequest(BaseModel):
     username: str
