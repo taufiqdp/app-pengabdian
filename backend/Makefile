@@ -2,7 +2,7 @@ install:
 	pip install -r requirements.txt
 
 format:
-	black *py api/*py api/routers/*py api/internal/*py
+	black *py app/*py app/routers/*py app/internal/*py
 
 run:
 	uvicorn main:app

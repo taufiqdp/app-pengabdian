@@ -12,12 +12,13 @@ from app.models import User
 from app.dependencies import bcrypt_context, db_dependency
 
 
-load_dotenv(find_dotenv())
+load_dotenv(override=True)
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 print(SECRET_KEY, ALGORITHM)
+
 
 class UserCreateRequest(BaseModel):
     username: str

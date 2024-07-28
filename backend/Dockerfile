@@ -1,17 +1,17 @@
-# Use an official Python runtime as the base image
-FROM python:3.10.2-slim
+FROM python:3.10
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the dependencies file to the working directory
+# Copy requirements.txt and install dependencies
 COPY requirements.txt .
-
-# Install any dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the content of the local src directory to the working directory
-COPY ./app .
+# Copy the application files
+COPY . .
 
-# Specify the command to run on container start
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Expose the port that the app will run on
+EXPOSE 80
+
+# Command to run the application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]

@@ -16,7 +16,7 @@ def get_user(db: db_dependency, user: user_dependency):
         )
 
     users = db.query(User).filter(User.is_admin == False).all()
-    
+
     users_dict = []
     for user in users:
         kegiatan = db.query(Kegiatan).filter(Kegiatan.user_id == user.id).all()

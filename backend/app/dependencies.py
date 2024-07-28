@@ -9,7 +9,7 @@ import os
 from app.database import SessionLocal
 
 
-load_dotenv(find_dotenv())
+load_dotenv(override=True)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
