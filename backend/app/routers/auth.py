@@ -88,7 +88,7 @@ async def create_admin(user: AdminCreateRequest, db: db_dependency):
     return {"detail": "Admin created successfully"}
 
 
-@router.post("/token", response_model=Token)
+@router.post("/login", response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency
 ):
