@@ -16,4 +16,4 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       working-directory: ./backend
-      run: docker build . --file backend/Dockerfile --tag app-pengabdian:$(date +%s)
+      run: docker build . --file Dockerfile --tag app-pengabdian:$(date +%s)
