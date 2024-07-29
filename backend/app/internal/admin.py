@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
 
 from app.models import User, Kegiatan
 from app.dependencies import db_dependency, user_dependency, admin_dependency

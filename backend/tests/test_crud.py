@@ -89,10 +89,9 @@ def test_read_users_me(client, test_user):
 
     # Get user
     response = client.get(
-        "/auth/users/me", headers={"Authorization": f"Bearer {token}"}
+        "/users/me", headers={"Authorization": f"Bearer {token}"}
     )
     assert response.status_code == 200
-    # print(response.json())
     assert response.json() == {"id": 1, "username": "test", "is_admin": False}
 
 
@@ -253,7 +252,7 @@ def test_delete_user_as_admin(client, test_admin, test_user):
     assert token_user is not None
 
     user_id = client.get(
-        "/auth/users/me", headers={"Authorization": f"Bearer {token_user}"}
+        "/users/me", headers={"Authorization": f"Bearer {token_user}"}
     ).json()["id"]
     assert user_id is not None
 

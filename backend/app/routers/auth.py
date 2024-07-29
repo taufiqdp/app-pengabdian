@@ -68,11 +68,6 @@ async def create_user(user: UserCreateRequest, db: db_dependency):
     return {"detail": "User created successfully"}
 
 
-@router.get("/users/me", response_model=user_dependency)
-async def read_users_me(current_user: user_dependency):
-    return current_user
-
-
 @router.post("/admin", status_code=status.HTTP_201_CREATED)
 async def create_admin(user: AdminCreateRequest, db: db_dependency):
     if db.query(User).filter(User.username == user.username).first():
