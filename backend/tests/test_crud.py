@@ -53,12 +53,12 @@ def test_admin():
 
 def test_create_and_login_user(client, test_user):
     # Create user
-    response = client.post("/auth/user", json=test_user)
+    response = client.post("/auth/users", json=test_user)
     assert response.status_code == 201
     assert response.json() == {"detail": "User created successfully"}
 
     # Login
-    response = client.post("/auth/login", data=test_user)
+    response = client.post("/auth/token", data=test_user)
     print(response.json())
     assert response.status_code == 200
     token = response.json()["access_token"]
@@ -67,13 +67,33 @@ def test_create_and_login_user(client, test_user):
 
 def test_create_user_duplicate(client, test_user):
     # Create user
-    response = client.post("/auth/user", json=test_user)
+    response = client.post("/auth/users", json=test_user)
     assert response.status_code == 201
 
     # Try to create the same user again
-    response = client.post("/auth/user", json=test_user)
+    response = client.post("/auth/users", json=test_user)
     assert response.status_code == 400
     assert response.json() == {"detail": "Username already exists"}
+
+
+def test_read_users_me(client, test_user):
+    # Create user
+    response = client.post("/auth/users", json=test_user)
+    assert response.status_code == 201
+
+    # Login
+    response = client.post("/auth/token", data=test_user)
+    assert response.status_code == 200
+    token = response.json()["access_token"]
+    assert token is not None
+
+    # Get user
+    response = client.get(
+        "/auth/users/me", headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response.status_code == 200
+    # print(response.json())
+    assert response.json() == {"id": 1, "username": "test", "is_admin": False}
 
 
 def test_create_and_login_admin(client, test_admin):
@@ -83,7 +103,7 @@ def test_create_and_login_admin(client, test_admin):
     assert response.json() == {"detail": "Admin created successfully"}
 
     # Login
-    response = client.post("/auth/login", data=test_admin)
+    response = client.post("/auth/token", data=test_admin)
     assert response.status_code == 200
     token = response.json()["access_token"]
     assert token is not None
@@ -102,11 +122,11 @@ def test_create_admin_duplicate(client, test_admin):
 
 def test_create_kegiatan(client, test_user):
     # Create user
-    response = client.post("/auth/user", json=test_user)
+    response = client.post("/auth/users", json=test_user)
     assert response.status_code == 201
 
     # Login
-    response = client.post("/auth/login", data=test_user)
+    response = client.post("/auth/token", data=test_user)
     assert response.status_code == 200
     token = response.json()["access_token"]
     assert token is not None
@@ -135,11 +155,11 @@ def test_create_kegiatan(client, test_user):
 
 def test_get_kegiatan(client, test_user):
     # Create user
-    response = client.post("/auth/user", json=test_user)
+    response = client.post("/auth/users", json=test_user)
     assert response.status_code == 201
 
     # Login
-    response = client.post("/auth/login", data=test_user)
+    response = client.post("/auth/token", data=test_user)
     assert response.status_code == 200
     token = response.json()["access_token"]
     assert token is not None
@@ -178,7 +198,7 @@ def test_create_kegiatan_as_admin(client, test_admin):
     assert response.status_code == 201
 
     # Login
-    response = client.post("/auth/login", data=test_admin)
+    response = client.post("/auth/token", data=test_admin)
     assert response.status_code == 200
     token = response.json()["access_token"]
     assert token is not None
@@ -202,7 +222,7 @@ def test_get_user_as_admin(client, test_admin):
     # Create 3 users
     for i in range(3):
         response = client.post(
-            "/auth/user", json={"username": f"user{i}", "password": f"user{i}"}
+            "/auth/users", json={"username": f"user{i}", "password": f"user{i}"}
         )
         assert response.status_code == 201
     # Create admin
@@ -210,12 +230,46 @@ def test_get_user_as_admin(client, test_admin):
     assert response.status_code == 201
 
     # Login
-    response = client.post("/auth/login", data=test_admin)
+    response = client.post("/auth/token", data=test_admin)
     assert response.status_code == 200
     token = response.json()["access_token"]
     assert token is not None
 
     # Get user as admin
-    response = client.get("/admin/user", headers={"Authorization": f"Bearer {token}"})
+    response = client.get("/admin/users", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert len(response.json()) == 3
+
+
+def test_delete_user_as_admin(client, test_admin, test_user):
+    # Create user
+    response = client.post("/auth/users", json=test_user)
+    assert response.status_code == 201
+
+    # Get user id
+    response = client.post("/auth/token", data=test_user)
+    assert response.status_code == 200
+    token_user = response.json()["access_token"]
+    assert token_user is not None
+
+    user_id = client.get(
+        "/auth/users/me", headers={"Authorization": f"Bearer {token_user}"}
+    ).json()["id"]
+    assert user_id is not None
+
+    # Create admin
+    response = client.post("/auth/admin", json=test_admin)
+    assert response.status_code == 201
+
+    # Login as admin
+    response = client.post("/auth/token", data=test_admin)
+    assert response.status_code == 200
+    token = response.json()["access_token"]
+    assert token is not None
+
+    # Delete user as admin
+    response = client.delete(
+        f"/admin/users/{user_id}", headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response.status_code == 200
+    assert response.json() == {"detail": "User deleted"}

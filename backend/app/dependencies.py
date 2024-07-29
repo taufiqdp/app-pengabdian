@@ -50,5 +50,15 @@ async def get_current_user(token: str = oauth2_scheme_dependency):
         )
 
 
+def is_admin(user: dict = Depends(get_current_user)):
+    if not user["is_admin"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not an admin",
+        )
+    return user
+
+
 user_dependency = Annotated[dict, Depends(get_current_user)]
+admin_dependency = Annotated[dict, Depends(is_admin)]
 db_dependency = Annotated[Session, Depends(get_db)]

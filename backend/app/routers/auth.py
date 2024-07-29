@@ -9,7 +9,7 @@ from typing import Annotated
 import os
 
 from app.models import User
-from app.dependencies import bcrypt_context, db_dependency
+from app.dependencies import bcrypt_context, db_dependency, user_dependency
 
 
 load_dotenv(override=True)
@@ -52,7 +52,7 @@ def create_access_token(username: dict, user_id, is_admin, expires_delta: timede
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-@router.post("/user", status_code=status.HTTP_201_CREATED)
+@router.post("/users", status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreateRequest, db: db_dependency):
     if db.query(User).filter(User.username == user.username).first():
         raise HTTPException(
@@ -66,6 +66,11 @@ async def create_user(user: UserCreateRequest, db: db_dependency):
     db.refresh(new_user)
 
     return {"detail": "User created successfully"}
+
+
+@router.get("/users/me", response_model=user_dependency)
+async def read_users_me(current_user: user_dependency):
+    return current_user
 
 
 @router.post("/admin", status_code=status.HTTP_201_CREATED)
@@ -88,7 +93,7 @@ async def create_admin(user: AdminCreateRequest, db: db_dependency):
     return {"detail": "Admin created successfully"}
 
 
-@router.post("/login", response_model=Token)
+@router.post("/token", response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency
 ):
