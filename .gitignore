@@ -35,6 +35,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 .env
+*.db
 
 # Virtual environment
 .venv/
