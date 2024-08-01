@@ -51,6 +51,43 @@ def test_admin():
     return {"username": "admin", "password": "admin", "is_admin": True}
 
 
+def test_create_pamong_as_admin(client, test_admin):
+    # Create admin
+    response = client.post("/auth/admin", json=test_admin)
+    assert response.status_code == 201
+
+    # Login
+    response = client.post("/auth/token", data=test_admin)
+    assert response.status_code == 200
+    token = response.json()["access_token"]
+    assert token is not None
+
+    # Create pamong
+    response = client.post(
+        "pamong/",
+        json={
+            "nama": "Pamong 1",
+            "nip": "1234567890",
+            "jabatan": "Jabatan 1",
+            "nik": "1234567890123456",
+            "tempat_lahir": "Tempat 1",
+            "tanggal_lahir": "2022-12-12",
+            "alamat": "Alamat 1",
+            "status_kawin": "Kawin",
+            "pekerjaan": "Pekerjaan 1",
+            "gol_darah": "A",
+            "agama": "Islam",
+            "jenis_kelamin": "L",
+            "masa_jabatan_mulai": 2022,
+            "masa_jabatan_selesai": 2023,
+            "pendidikan_terakhir": "S1",
+        },
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    print(response.json())
+    assert response.status_code == 201
+
+
 def test_create_and_login_user(client, test_user):
     # Create user
     response = client.post("/auth/users", json=test_user)
@@ -88,9 +125,7 @@ def test_read_users_me(client, test_user):
     assert token is not None
 
     # Get user
-    response = client.get(
-        "/users/me", headers={"Authorization": f"Bearer {token}"}
-    )
+    response = client.get("/users/me", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert response.json() == {"id": 1, "username": "test", "is_admin": False}
 
