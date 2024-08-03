@@ -13,7 +13,7 @@ from app.database import SessionLocal
 load_dotenv(override=True)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
+ALGORITHM = "HS256"
 
 
 def get_db():

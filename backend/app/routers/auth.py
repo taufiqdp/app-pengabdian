@@ -8,23 +8,31 @@ from dotenv import load_dotenv
 from typing import Annotated
 import os
 
-from app.models import User
-from app.dependencies import bcrypt_context, db_dependency, user_dependency
+from app.models import User, Pamong
+from app.dependencies import (
+    bcrypt_context,
+    db_dependency,
+    user_dependency,
+    admin_dependency,
+)
 
 
 load_dotenv(override=True)
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
+ALGORITHM = "HS256"
 
 
 class UserCreateRequest(BaseModel):
+    nik: str
     username: str
     password: str
 
 
-class AdminCreateRequest(UserCreateRequest):
+class AdminCreateRequest(BaseModel):
+    username: str
+    password: str
     is_admin: bool
 
 
@@ -60,12 +68,20 @@ async def create_user(user: UserCreateRequest, db: db_dependency):
             detail="Username already exists",
         )
 
-    new_user = User(username=user.username, password=bcrypt_context.hash(user.password))
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    if db.query(Pamong).filter(Pamong.nik == user.nik).first():
+        new_user = User(
+            username=user.username, password=bcrypt_context.hash(user.password)
+        )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
 
-    return {"detail": "User created successfully"}
+        return {"detail": "User created successfully"}
+
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="NIK not found",
+    )
 
 
 @router.post("/admin", status_code=status.HTTP_201_CREATED)
@@ -88,9 +104,10 @@ async def create_admin(user: AdminCreateRequest, db: db_dependency):
     return {"detail": "Admin created successfully"}
 
 
-@router.post("/token", response_model=Token)
-async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency
+@router.post("/admin/token", response_model=Token)
+async def login_for_access_token_web(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    db: db_dependency,
 ):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
@@ -100,8 +117,42 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    if not user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized access",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     access_token = create_access_token(
-        user.username, user.id, user.is_admin, timedelta(days=30)
+        user.username, user.id, user.is_admin, timedelta(minutes=10)
+    )
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/token", response_model=Token)
+async def login_for_access_token_mobile(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    db: db_dependency,
+):
+    user = authenticate_user(form_data.username, form_data.password, db)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    if user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized access",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    access_token = create_access_token(
+        user.username, user.id, user.is_admin, timedelta(minutes=10)
     )
 
     return {"access_token": access_token, "token_type": "bearer"}

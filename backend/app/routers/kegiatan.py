@@ -1,6 +1,7 @@
 from pydantic import BaseModel
-from fastapi import APIRouter, status, UploadFile, HTTPException
+from fastapi import APIRouter, status, HTTPException
 from datetime import datetime
+from typing import Optional
 
 from app.models import Kegiatan
 from app.dependencies import db_dependency, user_dependency
@@ -12,7 +13,8 @@ class KegiatanCreateRequest(BaseModel):
     nama_kegiatan: str
     tanggal: datetime
     tempat: str
-    deskripsi: str
+    deskripsi: Optional[str] = None
+    gambar: Optional[str] = None
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
@@ -24,6 +26,10 @@ def create_kegiatan(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Admin cannot create kegiatan",
         )
+    
+    if kegiatan.gambar is not None:
+        path = f"assets/uploads/{kegiatan.gambar}"
+        kegiatan.gambar = path
 
     new_kegiatan = Kegiatan(
         nama_kegiatan=kegiatan.nama_kegiatan,

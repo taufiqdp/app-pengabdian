@@ -12,27 +12,7 @@ def get_users(db: db_dependency, admin: admin_dependency):
 
     users = db.query(User).filter(User.is_admin == False).all()
 
-    users_dict = []
-    for user in users:
-        kegiatan = db.query(Kegiatan).filter(Kegiatan.user_id == user.id).all()
-        users_dict.append(
-            {
-                "id": user.id,
-                "username": user.username,
-                "kegiatan": [
-                    {
-                        "id": k.id,
-                        "nama_kegiatan": k.nama_kegiatan,
-                        "tanggal": k.tanggal,
-                        "tempat": k.tempat,
-                        "deskripsi": k.deskripsi,
-                    }
-                    for k in kegiatan
-                ],
-            }
-        )
-
-    return users_dict
+    return users
 
 
 @router.delete("/users/{user_id}")
