@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.models import User, Kegiatan
+from app.models import User, Kegiatan, Pamong
 from app.dependencies import db_dependency, user_dependency, admin_dependency
 
 
@@ -35,12 +35,8 @@ def delete_user(user_id: int, db: db_dependency, admin: admin_dependency):
     return {"detail": "User deleted"}
 
 
-# @router.get("/kegiatan")
-# def get_kegiatan(db: db_dependency, user: user_dependency):
-#     if not user["is_admin"]:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized"
-#         )
+@router.get("/pamong")
+def get_pamong(db: db_dependency):
+    pamong = db.query(Pamong).all()
 
-#     kegiatan = db.query(User).all().kegiatan
-#     return kegiatan
+    return pamong
