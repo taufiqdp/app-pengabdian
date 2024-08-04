@@ -19,8 +19,8 @@ app.add_middleware(
 
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def health_check():
+    return {"status": "ok"}
 
 
 app.include_router(auth.router)

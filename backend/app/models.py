@@ -36,6 +36,7 @@ class User(Base):
     username = Column(String)
     password = Column(String)
     is_admin = Column(Boolean, default=False)
+    email = Column(String, unique=True, nullable=True)
 
     pamong_id = Column(Integer, ForeignKey("pamong.id"))
 

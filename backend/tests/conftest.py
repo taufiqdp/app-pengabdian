@@ -43,7 +43,12 @@ def client(db_session):
 
 @pytest.fixture(scope="function")
 def test_user():
-    return {"username": "test", "password": "test", "nik": "3216012304891238"}
+    return {
+        "username": "test",
+        "password": "test",
+        "nip": "198703212011011005",
+        "email": "test@gmail.com",
+    }
 
 
 @pytest.fixture(scope="function")

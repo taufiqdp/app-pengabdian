@@ -11,9 +11,7 @@ import os
 from app.models import User, Pamong
 from app.dependencies import (
     bcrypt_context,
-    db_dependency,
-    user_dependency,
-    admin_dependency,
+    db_dependency
 )
 
 
@@ -25,9 +23,10 @@ ALGORITHM = "HS256"
 
 
 class UserCreateRequest(BaseModel):
-    nik: str
+    nip: str
     username: str
     password: str
+    email: str
 
 
 class AdminCreateRequest(BaseModel):
@@ -40,8 +39,21 @@ class Token(BaseModel):
     token_type: str
 
 
-def authenticate_user(username: str, password: str, db: db_dependency):
-    user = db.query(User).filter(User.username == username).first()
+class ForgetPasswordRequest(BaseModel):
+    email: str
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+
+def authenticate_user(username: str, password: str, db: db_dependency, is_admin: bool = False):
+    if is_admin:
+        user = db.query(User).filter(User.username == username).first()
+    else:
+        user = db.query(User).join(Pamong, User.pamong_id == Pamong.id).filter((Pamong.nip == username) | (User.username == username)).first()
+
     if not user:
         return False
 
@@ -59,6 +71,14 @@ def create_access_token(username: dict, user_id, is_admin, expires_delta: timede
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
+def create_reset_password_token(email: str):
+    encode = {"sub": email}
+    expires = datetime.now(timezone.utc) + timedelta(minutes=15)
+    encode.update({"exp": expires})
+
+    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+
+
 @router.post("/users", status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreateRequest, db: db_dependency):
     if db.query(User).filter(User.username == user.username).first():
@@ -67,11 +87,12 @@ async def create_user(user: UserCreateRequest, db: db_dependency):
             detail="Username already exists",
         )
 
-    pamong = db.query(Pamong).filter(Pamong.nik == user.nik).first()
+    pamong = db.query(Pamong).filter(Pamong.nip == user.nip).first()
     if pamong:
         new_user = User(
             username=user.username,
             password=bcrypt_context.hash(user.password),
+            email=user.email,
             pamong_id=pamong.id,
             pamong=pamong,
         )
@@ -83,7 +104,7 @@ async def create_user(user: UserCreateRequest, db: db_dependency):
 
     raise HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
-        detail="NIK not found",
+        detail="NIP not found",
     )
 
 
@@ -112,7 +133,7 @@ async def login_for_access_token_web(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: db_dependency,
 ):
-    user = authenticate_user(form_data.username, form_data.password, db)
+    user = authenticate_user(form_data.username, form_data.password, db, is_admin=True)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -159,3 +180,41 @@ async def login_for_access_token_mobile(
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/forget-password")
+async def forget_password(request: ForgetPasswordRequest, db: db_dependency):
+    user = db.query(User).filter(User.email == request.email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Email not found",
+        )
+
+    reset_password_token = create_reset_password_token(user.email)
+
+    return {"reset_password_token": reset_password_token}
+
+
+@router.post("/reset-password")
+async def reset_password(request: ResetPasswordRequest, db: db_dependency):
+    try:
+        payload = jwt.decode(request.token, SECRET_KEY, algorithms=[ALGORITHM])
+    except jwt.JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+        )
+
+    user = db.query(User).filter(User.email == payload.get("sub")).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+    user.password = bcrypt_context.hash(request.new_password)
+    db.commit()
+
+    return {"detail": "Password reset successfully"}

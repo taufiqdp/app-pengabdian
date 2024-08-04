@@ -58,7 +58,10 @@ def get_kegiatan(db: db_dependency, user: user_dependency):
 
 @router.put("/{kegiatan_id}")
 def update_kegiatan(
-    kegiatan_id: int, kegiatan: KegiatanCreateRequest, db: db_dependency, user: user_dependency
+    kegiatan_id: int,
+    kegiatan: KegiatanCreateRequest,
+    db: db_dependency,
+    user: user_dependency,
 ):
     kegiatan_data = db.query(Kegiatan).filter(Kegiatan.id == kegiatan_id).first()
     if not kegiatan_data:
