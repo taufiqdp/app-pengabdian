@@ -26,7 +26,7 @@ def create_kegiatan(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Admin cannot create kegiatan",
         )
-    
+
     if kegiatan.gambar is not None:
         path = f"assets/uploads/{kegiatan.gambar}"
         kegiatan.gambar = path
@@ -42,7 +42,7 @@ def create_kegiatan(
     db.commit()
     db.refresh(new_kegiatan)
 
-    return new_kegiatan
+    return {"detail": "Kegiatan created"}
 
 
 @router.get("/")
@@ -54,6 +54,38 @@ def get_kegiatan(db: db_dependency, user: user_dependency):
     else:
         kegiatan = db.query(Kegiatan).all()
     return kegiatan
+
+
+@router.put("/{kegiatan_id}")
+def update_kegiatan(
+    kegiatan_id: int, kegiatan: KegiatanCreateRequest, db: db_dependency, user: user_dependency
+):
+    kegiatan_data = db.query(Kegiatan).filter(Kegiatan.id == kegiatan_id).first()
+    if not kegiatan_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Kegiatan not found"
+        )
+
+    if kegiatan_data.user_id != user["id"] and not user["is_admin"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not allowed to update this kegiatan",
+        )
+
+    if kegiatan.gambar is not None:
+        path = f"assets/uploads/{kegiatan.gambar}"
+        kegiatan.gambar = path
+
+    kegiatan_data.nama_kegiatan = kegiatan.nama_kegiatan
+    kegiatan_data.tanggal = kegiatan.tanggal
+    kegiatan_data.tempat = kegiatan.tempat
+    kegiatan_data.deskripsi = kegiatan.deskripsi
+    kegiatan_data.gambar = kegiatan.gambar
+
+    db.commit()
+    db.refresh(kegiatan_data)
+
+    return {"detail": "Kegiatan updated"}
 
 
 @router.delete("/{kegiatan_id}")

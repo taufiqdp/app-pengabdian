@@ -33,7 +33,6 @@ class UserCreateRequest(BaseModel):
 class AdminCreateRequest(BaseModel):
     username: str
     password: str
-    is_admin: bool
 
 
 class Token(BaseModel):
@@ -68,9 +67,13 @@ async def create_user(user: UserCreateRequest, db: db_dependency):
             detail="Username already exists",
         )
 
-    if db.query(Pamong).filter(Pamong.nik == user.nik).first():
+    pamong = db.query(Pamong).filter(Pamong.nik == user.nik).first()
+    if pamong:
         new_user = User(
-            username=user.username, password=bcrypt_context.hash(user.password)
+            username=user.username,
+            password=bcrypt_context.hash(user.password),
+            pamong_id=pamong.id,
+            pamong=pamong,
         )
         db.add(new_user)
         db.commit()

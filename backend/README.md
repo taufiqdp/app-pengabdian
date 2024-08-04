@@ -24,7 +24,7 @@ docker build -t pengabdian-backend .
 After the image is built, you can run the following command to run the Docker container:
 
 ```bash
-docker run -d -p 80:80 pengabdian-backend
+docker run -d -p 8000:80 pengabdian-backend
 ```
 
-The backend will be running on port 80. You can access the backend by going to [http://localhost](http://localhost) in your browser.
+The backend will be running on port 8000. You can access the backend by going to [http://localhost](http://localhost) in your browser.

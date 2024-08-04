@@ -5,6 +5,7 @@ from app.routers import auth, kegiatan, users, pamong
 from app.internal import admin
 from app.database import Base, engine
 
+
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
 

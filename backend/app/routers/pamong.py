@@ -7,7 +7,7 @@ from typing import Optional
 
 
 from app.dependencies import db_dependency, admin_dependency, user_dependency
-from app.models import Pamong
+from app.models import Pamong, User
 
 router = APIRouter(prefix="/pamong", tags=["pamong"])
 
@@ -80,8 +80,26 @@ async def create_pamong(pamong: PamongBase, db: db_dependency):
 
 @router.get("/")
 async def get_pamong(db: db_dependency, user: user_dependency):
-    pamong = db.query(Pamong).filter(Pamong.user_id == user["id"]).first()
-    if not pamong:
-        return {"detail": "No pamong found"}
+    user_data = db.query(User).filter(User.id == user["id"]).first()
 
-    return pamong
+    return user_data.pamong
+
+
+@router.put("/")
+async def update_pamong(user: user_dependency, pamong: PamongBase, db: db_dependency):
+    user_data = db.query(User).filter(User.id == user["id"]).first()
+
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Pamong not found"
+        )
+
+    pamong_to_update = user_data.pamong
+
+    for key, value in pamong.model_dump(exclude_unset=True).items():
+        setattr(pamong_to_update, key, value)
+
+    db.commit()
+    db.refresh(pamong_to_update)
+
+    return pamong_to_update

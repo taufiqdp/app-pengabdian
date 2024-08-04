@@ -45,7 +45,7 @@ def test_create_kegiatan(client, test_user, test_admin, test_pamong):
 
 
 def test_get_kegiatan(client, test_user, test_admin, test_pamong):
-        # Create admin
+    # Create admin
     response = client.post("/auth/admin", json=test_admin)
     assert response.status_code == 201
 

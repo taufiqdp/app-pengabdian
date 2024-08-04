@@ -48,26 +48,26 @@ def test_user():
 
 @pytest.fixture(scope="function")
 def test_admin():
-    return {"username": "admin", "password": "admin", "is_admin": True}
+    return {"username": "admin", "password": "admin"}
 
 
 @pytest.fixture(scope="function")
 def test_pamong():
     return {
-            "nama": "David Lee",
-            "nik": "3216012304891238",
-            "nip": "198703212011011005",
-            "tempat_lahir": "Medan",
-            "tanggal_lahir": "1987-03-21T06:54:18.299Z",
-            "alamat": "Jl. Sisingamangaraja No. 101, Medan",
-            "status_kawin": "Kawin",
-            "pekerjaan": "PNS",
-            "jabatan": "Kepala Sub Bagian",
-            "gol_darah": "A",
-            "agama": "Hindu",
-            "jenis_kelamin": "L",
-            "masa_jabatan_mulai": 2017,
-            "masa_jabatan_selesai": 2022,
-            "pendidikan_terakhir": "S1 Teknik Sipil",
-            "image": "david-lee.jpg",
-        }
+        "nama": "David Lee",
+        "nik": "3216012304891238",
+        "nip": "198703212011011005",
+        "tempat_lahir": "Medan",
+        "tanggal_lahir": "1987-03-21T06:54:18.299Z",
+        "alamat": "Jl. Sisingamangaraja No. 101, Medan",
+        "status_kawin": "Kawin",
+        "pekerjaan": "PNS",
+        "jabatan": "Kepala Sub Bagian",
+        "gol_darah": "A",
+        "agama": "Hindu",
+        "jenis_kelamin": "L",
+        "masa_jabatan_mulai": 2017,
+        "masa_jabatan_selesai": 2022,
+        "pendidikan_terakhir": "S1 Teknik Sipil",
+        "image": "david-lee.jpg",
+    }

@@ -33,7 +33,7 @@ def test_create_and_login_user(client, test_user, test_admin, test_pamong):
 
 
 def test_create_user_duplicate(client, test_user, test_admin, test_pamong):
-        # Create admin
+    # Create admin
     response = client.post("/auth/admin", json=test_admin)
     assert response.status_code == 201
 
@@ -148,7 +148,7 @@ def test_login_user_in_admin(client, test_user, test_admin, test_pamong):
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 201
-    
+
     # Create user
     response = client.post("/auth/users", json=test_user)
     assert response.status_code == 201
