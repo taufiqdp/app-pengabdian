@@ -75,12 +75,16 @@ async def create_pamong(pamong: PamongBase, db: db_dependency):
     db.commit()
     db.refresh(new_pamong)
 
-    return new_pamong
+    return {"detail": "Pamong created"}
 
 
 @router.get("/")
 async def get_pamong(db: db_dependency, user: user_dependency):
     user_data = db.query(User).filter(User.id == user["id"]).first()
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
 
     return user_data.pamong
 
@@ -102,4 +106,4 @@ async def update_pamong(user: user_dependency, pamong: PamongBase, db: db_depend
     db.commit()
     db.refresh(pamong_to_update)
 
-    return pamong_to_update
+    return {"detail": "Pamong updated"}

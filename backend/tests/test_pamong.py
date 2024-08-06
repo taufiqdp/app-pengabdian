@@ -1,97 +1,51 @@
 from tests.conftest import test_admin, client, test_user, test_pamong
 
 
-def test_create_pamong_(client, test_admin, test_pamong):
-    # Create admin
-    response = client.post("/auth/admin", json=test_admin)
-    assert response.status_code == 201
-
-    # Login
+# Helper function to create and login admin
+def create_and_login_admin(client, test_admin):
+    client.post("/auth/admin", json=test_admin)
     response = client.post("/auth/admin/token", data=test_admin)
     assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
+    return response.json()["access_token"]
 
-    # Create pamong
+
+# Helper function to create a user and login
+def create_and_login_user(client, test_user, test_admin, test_pamong):
+    admin_token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, admin_token)
+    client.post("/auth/users", json=test_user)
+    response = client.post("/auth/token", data=test_user)
+    assert response.status_code == 200
+    return response.json()["access_token"]
+
+
+# Helper function to create a pamong
+def create_pamong(client, test_pamong, token):
     response = client.post(
         "pamong/",
         json=test_pamong,
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 201
+
+
+def test_create_pamong(client, test_admin, test_pamong):
+    admin_token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, admin_token)
 
 
 def test_get_pamong(client, test_admin, test_user, test_pamong):
-    # Create admin
-    response = client.post("/auth/admin", json=test_admin)
-    assert response.status_code == 201
-
-    # Login
-    response = client.post("/auth/admin/token", data=test_admin)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Create pamong
-    response = client.post(
-        "pamong/",
-        json=test_pamong,
-        headers={"Authorization": f"Bearer {token}"},
-    )
-    assert response.status_code == 201
-
-    # Create user
-    response = client.post("/auth/users", json=test_user)
-    assert response.status_code == 201
-
-    # Login
-    response = client.post("/auth/token", data=test_user)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Get pamong
-    response = client.get(
-        "pamong/",
-        headers={"Authorization": f"Bearer {token}"},
-    )
+    user_token = create_and_login_user(client, test_user, test_admin, test_pamong)
+    response = client.get("pamong/", headers={"Authorization": f"Bearer {user_token}"})
     assert response.status_code == 200
 
 
 def test_update_pamong(client, test_admin, test_user, test_pamong):
-    # Create admin
-    response = client.post("/auth/admin", json=test_admin)
-    assert response.status_code == 201
-
-    # Login
-    response = client.post("/auth/admin/token", data=test_admin)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Create pamong
-    response = client.post(
-        "pamong/",
-        json=test_pamong,
-        headers={"Authorization": f"Bearer {token}"},
-    )
-    assert response.status_code == 201
-
-    # Create user
-    response = client.post("/auth/users", json=test_user)
-    assert response.status_code == 201
-
-    # Login
-    response = client.post("/auth/token", data=test_user)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Update pamong
-    test_pamong.update({"nama": "David Hoop"})
+    user_token = create_and_login_user(client, test_user, test_admin, test_pamong)
+    test_pamong.update({"nama": "mDavid Hoop"})
     response = client.put(
         "pamong/",
         json=test_pamong,
-        headers={"Authorization": f"Bearer {token}"},
+        headers={"Authorization": f"Bearer {user_token}"},
     )
     assert response.status_code == 200

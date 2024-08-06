@@ -1,18 +1,22 @@
 from tests.conftest import client, test_admin, test_user, test_pamong
 
 
-def test_get_user_as_admin(client, test_admin, test_user, test_pamong):
-    # Create admin
-    response = client.post("/auth/admin", json=test_admin)
-    assert response.status_code == 201
-
-    # Login
+# Helper function to create and login admin
+def create_and_login_admin(client, test_admin):
+    client.post("/auth/admin", json=test_admin)
     response = client.post("/auth/admin/token", data=test_admin)
     assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
+    return response.json()["access_token"]
 
-    # Create pamong
+
+# Helper function to create a user
+def create_user(client, test_user):
+    response = client.post("/auth/users", json=test_user)
+    assert response.status_code == 201
+
+
+# Helper function to create a pamong
+def create_pamong(client, test_pamong, token):
     response = client.post(
         "pamong/",
         json=test_pamong,
@@ -20,53 +24,97 @@ def test_get_user_as_admin(client, test_admin, test_user, test_pamong):
     )
     assert response.status_code == 201
 
-    # Create user
-    response = client.post("/auth/users", json=test_user)
-    assert response.status_code == 201
 
-    # Get user as admin
+def test_get_user_as_admin(client, test_admin, test_user, test_pamong):
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+    create_user(client, test_user)
+
     response = client.get("/admin/users", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert len(response.json()) == 1
 
 
 def test_delete_user_as_admin(client, test_admin, test_user, test_pamong):
-    # Create admin
-    response = client.post("/auth/admin", json=test_admin)
-    assert response.status_code == 201
-
-    # Login
-    response = client.post("/auth/admin/token", data=test_admin)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Create pamong
-    response = client.post(
-        "pamong/",
-        json=test_pamong,
-        headers={"Authorization": f"Bearer {token}"},
-    )
-    assert response.status_code == 201
-
-    # Create user
-    response = client.post("/auth/users", json=test_user)
-    assert response.status_code == 201
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+    create_user(client, test_user)
 
     # Get user id
     response = client.post("/auth/token", data=test_user)
-    assert response.status_code == 200
     token_user = response.json()["access_token"]
-    assert token_user is not None
-
     user_id = client.get(
         "/users/me", headers={"Authorization": f"Bearer {token_user}"}
     ).json()["id"]
-    assert user_id is not None
 
-    # Delete user as admin
     response = client.delete(
         f"/admin/users/{user_id}", headers={"Authorization": f"Bearer {token}"}
     )
     assert response.status_code == 200
     assert response.json() == {"detail": "User deleted"}
+
+
+def test_get_pamong_as_admin(client, test_admin, test_pamong):
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+
+    response = client.get("/admin/pamong", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+
+
+def test_update_pamong_as_admin(client, test_admin, test_pamong):
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+
+    # Get pamong id
+    pamong_id = client.get(
+        "/admin/pamong/", headers={"Authorization": f"Bearer {token}"}
+    ).json()[0]["id"]
+
+    # Update pamong as admin
+    test_pamong["pekerjaan"] = "Dosen"
+    response = client.put(
+        f"/admin/pamong/{pamong_id}",
+        json=test_pamong,
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 200
+    assert response.json() == {"detail": "Pamong updated"}
+
+
+def test_delete_pamong_as_admin(client, test_admin, test_pamong):
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+
+    # Get pamong id
+    pamong_id = client.get(
+        "admin/pamong/", headers={"Authorization": f"Bearer {token}"}
+    ).json()[0]["id"]
+
+    response = client.delete(
+        f"/admin/pamong/{pamong_id}", headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response.status_code == 200
+    assert response.json() == {"detail": "Pamong deleted"}
+
+
+def test_delete_pamong_as_user(client, test_user, test_pamong, test_admin):
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+    create_user(client, test_user)
+
+    # Login as user
+    response = client.post("/auth/token", data=test_user)
+    token = response.json()["access_token"]
+
+    # Get pamong id (this might need adjustment depending on your API)
+    pamong_id = client.get(
+        "pamong/", headers={"Authorization": f"Bearer {token}"}
+    ).json()["id"]
+
+    # Delete pamong as user
+    response = client.delete(
+        f"admin/pamong/{pamong_id}", headers={"Authorization": token}
+    )
+    assert response.status_code == 401

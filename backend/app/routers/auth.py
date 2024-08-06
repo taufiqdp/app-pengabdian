@@ -9,10 +9,7 @@ from typing import Annotated
 import os
 
 from app.models import User, Pamong
-from app.dependencies import (
-    bcrypt_context,
-    db_dependency
-)
+from app.dependencies import bcrypt_context, db_dependency
 
 
 load_dotenv(override=True)
@@ -48,11 +45,18 @@ class ResetPasswordRequest(BaseModel):
     new_password: str
 
 
-def authenticate_user(username: str, password: str, db: db_dependency, is_admin: bool = False):
+def authenticate_user(
+    username: str, password: str, db: db_dependency, is_admin: bool = False
+):
     if is_admin:
         user = db.query(User).filter(User.username == username).first()
     else:
-        user = db.query(User).join(Pamong, User.pamong_id == Pamong.id).filter((Pamong.nip == username) | (User.username == username)).first()
+        user = (
+            db.query(User)
+            .join(Pamong, User.pamong_id == Pamong.id)
+            .filter((Pamong.nip == username) | (User.username == username))
+            .first()
+        )
 
     if not user:
         return False

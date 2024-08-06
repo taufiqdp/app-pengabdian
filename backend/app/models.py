@@ -19,7 +19,9 @@ class Pamong(Base):
     pekerjaan = Column(String(50), nullable=True)
     jabatan = Column(String(50), nullable=True)  #
     gol_darah = Column(Enum("A", "B", "AB", "O"), nullable=True)
-    agama = Column(String(20), nullable=True)
+    agama = Column(
+        Enum("Islam", "Kristen", "Katolik", "Hindu", "Budha", "Konghucu"), nullable=True
+    )
     jenis_kelamin = Column(Enum("L", "P"), nullable=True)
     masa_jabatan_mulai = Column(Integer, nullable=True)
     masa_jabatan_selesai = Column(Integer, nullable=True)
@@ -33,10 +35,10 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String)
-    password = Column(String)
+    username = Column(String(50), unique=True, nullable=False)
+    password = Column(String(100), nullable=False)
     is_admin = Column(Boolean, default=False)
-    email = Column(String, unique=True, nullable=True)
+    email = Column(String(50), unique=True, nullable=True)
 
     pamong_id = Column(Integer, ForeignKey("pamong.id"))
 
@@ -49,10 +51,10 @@ class Kegiatan(Base):
     __tablename__ = "kegiatan"
 
     id = Column(Integer, primary_key=True, index=True)
-    nama_kegiatan = Column(String)
+    nama_kegiatan = Column(String(50))
     tanggal = Column(Date)
-    tempat = Column(String)
-    deskripsi = Column(String)
+    tempat = Column(String(50))
+    deskripsi = Column(String(2000))
     gambar = Column(String)
 
     user_id = Column(Integer, ForeignKey("user.id"))

@@ -53,6 +53,7 @@ def get_kegiatan(db: db_dependency, user: user_dependency):
             return {"detail": "No kegiatan found"}
     else:
         kegiatan = db.query(Kegiatan).all()
+
     return kegiatan
 
 

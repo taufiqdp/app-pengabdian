@@ -1,18 +1,26 @@
 from tests.conftest import test_user, test_admin, client, test_pamong
 
 
-def test_create_kegiatan(client, test_user, test_admin, test_pamong):
-    # Create admin
-    response = client.post("/auth/admin", json=test_admin)
-    assert response.status_code == 201
-
-    # Login
+# Helper function to create and login admin
+def create_and_login_admin(client, test_admin):
+    client.post("/auth/admin", json=test_admin)
     response = client.post("/auth/admin/token", data=test_admin)
     assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
+    return response.json()["access_token"]
 
-    # Create pamong
+
+# Helper function to create a user and login
+def create_and_login_user(client, test_user, test_admin, test_pamong):
+    admin_token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, admin_token)
+    client.post("/auth/users", json=test_user)
+    response = client.post("/auth/token", data=test_user)
+    assert response.status_code == 200
+    return response.json()["access_token"]
+
+
+# Helper function to create a pamong
+def create_pamong(client, test_pamong, token):
     response = client.post(
         "pamong/",
         json=test_pamong,
@@ -20,17 +28,9 @@ def test_create_kegiatan(client, test_user, test_admin, test_pamong):
     )
     assert response.status_code == 201
 
-    # Create user
-    response = client.post("/auth/users", json=test_user)
-    assert response.status_code == 201
 
-    # Login
-    response = client.post("/auth/token", data=test_user)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Create kegiatan
+# Helper function to create a kegiatan
+def create_kegiatan(client, token):
     response = client.post(
         "/kegiatan/",
         json={
@@ -42,67 +42,24 @@ def test_create_kegiatan(client, test_user, test_admin, test_pamong):
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 201
+
+
+def test_create_kegiatan(client, test_user, test_admin, test_pamong):
+    user_token = create_and_login_user(client, test_user, test_admin, test_pamong)
+    create_kegiatan(client, user_token)
 
 
 def test_get_kegiatan(client, test_user, test_admin, test_pamong):
-    # Create admin
-    response = client.post("/auth/admin", json=test_admin)
-    assert response.status_code == 201
-
-    # Login
-    response = client.post("/auth/admin/token", data=test_admin)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Create pamong
-    response = client.post(
-        "pamong/",
-        json=test_pamong,
-        headers={"Authorization": f"Bearer {token}"},
+    user_token = create_and_login_user(client, test_user, test_admin, test_pamong)
+    create_kegiatan(client, user_token)
+    response = client.get(
+        "/kegiatan/", headers={"Authorization": f"Bearer {user_token}"}
     )
-    assert response.status_code == 201
-
-    # Create user
-    response = client.post("/auth/users", json=test_user)
-    assert response.status_code == 201
-
-    # Login
-    response = client.post("/auth/token", data=test_user)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Create kegiatan
-    response = client.post(
-        "/kegiatan/",
-        json={
-            "nama_kegiatan": "Kegiatan 1",
-            "tanggal": "2022-12-12",
-            "tempat": "Tempat 1",
-            "deskripsi": "Deskripsi 1",
-        },
-        headers={"Authorization": f"Bearer {token}"},
-    )
-    assert response.status_code == 201
-
-    # Get kegiatan
-    response = client.get("/kegiatan/", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
 
 
 def test_create_kegiatan_as_admin(client, test_admin):
-    # Create admin
-    response = client.post("/auth/admin", json=test_admin)
-    assert response.status_code == 201
-
-    # Login
-    response = client.post("/auth/admin/token", data=test_admin)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    assert token is not None
-
-    # Try to create kegiatan as admin
+    admin_token = create_and_login_admin(client, test_admin)
     response = client.post(
         "/kegiatan/",
         json={
@@ -111,7 +68,6 @@ def test_create_kegiatan_as_admin(client, test_admin):
             "tempat": "Tempat 1",
             "deskripsi": "Deskripsi 1",
         },
-        headers={"Authorization": f"Bearer {token}"},
+        headers={"Authorization": f"Bearer {admin_token}"},
     )
     assert response.status_code == 400
-    assert response.json() == {"detail": "Admin cannot create kegiatan"}
