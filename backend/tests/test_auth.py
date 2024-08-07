@@ -58,6 +58,7 @@ def test_read_users_me(client, test_user, test_admin, test_pamong):
 
     response = client.get("/users/me", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
+    assert response.json()["username"] == test_user["username"]
 
 
 def test_create_and_login_admin(client, test_admin):
@@ -93,6 +94,22 @@ def test_login_user_in_admin(client, test_user, test_admin, test_pamong):
     assert response.json() == {"detail": "Unauthorized access"}
 
 
+def test_refresh_token(client, test_user, test_admin, test_pamong):
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+    create_user(client, test_user)
+
+    response = client.post("/auth/token", data=test_user)
+    token = response.json()["access_token"]
+    assert response.status_code == 200
+
+    response = client.post(
+        "/auth/refresh-token", headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response.status_code == 200
+    assert "access_token" in response.json()
+
+
 def test_forget_password(client, test_user, test_admin, test_pamong):
     token = create_and_login_admin(client, test_admin)
     create_pamong(client, test_pamong, token)
@@ -110,3 +127,4 @@ def test_forget_password(client, test_user, test_admin, test_pamong):
         },
     )
     assert response.status_code == 200
+    assert response.json() == {"detail": "Password reset successfully"}

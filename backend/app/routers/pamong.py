@@ -81,7 +81,7 @@ async def create_pamong(pamong: PamongBase, db: db_dependency):
 @router.get("/")
 async def get_pamong(db: db_dependency, user: user_dependency):
     user_data = db.query(User).filter(User.id == user["id"]).first()
-    if not user_data:
+    if not user_data.pamong:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )

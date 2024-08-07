@@ -9,7 +9,7 @@ from typing import Annotated
 import os
 
 from app.models import User, Pamong
-from app.dependencies import bcrypt_context, db_dependency
+from app.dependencies import bcrypt_context, db_dependency, user_dependency
 
 
 load_dotenv(override=True)
@@ -43,6 +43,10 @@ class ForgetPasswordRequest(BaseModel):
 class ResetPasswordRequest(BaseModel):
     token: str
     new_password: str
+
+
+class RefreshTokenRequest(BaseModel):
+    token: str
 
 
 def authenticate_user(
@@ -181,6 +185,15 @@ async def login_for_access_token_mobile(
 
     access_token = create_access_token(
         user.username, user.id, user.is_admin, timedelta(minutes=10)
+    )
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/refresh-token", response_model=Token)
+async def refresh_token(user: user_dependency):
+    access_token = create_access_token(
+        user["username"], user["id"], user["is_admin"], timedelta(minutes=10)
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
