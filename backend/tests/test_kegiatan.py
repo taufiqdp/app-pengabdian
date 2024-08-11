@@ -1,4 +1,5 @@
 from tests.conftest import test_user, test_admin, client, test_pamong
+import json
 
 
 # Helper function to create and login admin
@@ -23,7 +24,7 @@ def create_and_login_user(client, test_user, test_admin, test_pamong):
 def create_pamong(client, test_pamong, token):
     response = client.post(
         "pamong/",
-        json=test_pamong,
+        data={"pamong": json.dumps(test_pamong)},
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 201

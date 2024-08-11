@@ -12,7 +12,7 @@ from app.dependencies import bcrypt_context
 router = APIRouter(prefix="/helper", tags=["helper"])
 
 
-@router.get("/clear")
+@router.delete("/clear")
 async def clear_data(db: db_dependency, table_name: Optional[str] = "all"):
     if table_name == "all":
         db.execute(text("DELETE FROM pamong"))
@@ -38,7 +38,7 @@ with open("app/helper/kegiatan.json") as f:
     data_kegiatan = json.load(f)
 
 
-@router.post("/add_pamong")
+@router.post("/add_pamong", status_code=201)
 async def add_pamong(db: db_dependency):
     try:
         for item in data_pamong:
@@ -70,10 +70,7 @@ async def add_pamong(db: db_dependency):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-
-
-
-@router.post("/add_user")
+@router.post("/add_user", status_code=201)
 async def add_user(db: db_dependency):
     try:
         for item in data_user:
@@ -95,10 +92,7 @@ async def add_user(db: db_dependency):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-
-
-
-@router.post("/add_kegiatan")
+@router.post("/add_kegiatan", status_code=201)
 async def add_kegiatan(db: db_dependency):
     try:
         for item in data_kegiatan:

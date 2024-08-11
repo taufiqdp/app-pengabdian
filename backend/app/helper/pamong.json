@@ -15,7 +15,7 @@
     "masa_jabatan_mulai": 2017,
     "masa_jabatan_selesai": 2022,
     "pendidikan_terakhir": "S1 Teknik Sipil",
-    "gambar": "david-lee.jpg"
+    "gambar": "/app/uploads/0.jpg"
   },
   {
     "nama": "Siti Nurhaliza",
@@ -33,7 +33,7 @@
     "masa_jabatan_mulai": 2015,
     "masa_jabatan_selesai": 2020,
     "pendidikan_terakhir": "S1 Administrasi Publik",
-    "gambar": "siti-nurhaliza.jpg"
+    "gambar": "/app/uploads/1.jpg"
   },
   {
     "nama": "Budi Santoso",
@@ -51,7 +51,8 @@
     "masa_jabatan_mulai": 2016,
     "masa_jabatan_selesai": 2021,
     "pendidikan_terakhir": "S2 Manajemen",
-    "gambar": "budi-santoso.jpg"
+    "gambar": "/app/uploads/2.jpg"
+
   },
   {
     "nama": "Maria Christina",
@@ -69,7 +70,7 @@
     "masa_jabatan_mulai": 2018,
     "masa_jabatan_selesai": 2023,
     "pendidikan_terakhir": "S1 Ilmu Politik",
-    "gambar": "maria-christina.jpg"
+    "gambar": "/app/uploads/3.jpg"
   },
   {
     "nama": "Ahmad Fauzi",
@@ -87,7 +88,7 @@
     "masa_jabatan_mulai": 2019,
     "masa_jabatan_selesai": 2024,
     "pendidikan_terakhir": "S1 Akuntansi",
-    "gambar": "ahmad-fauzi.jpg"
+    "gambar": "/app/uploads/4.jpg"
   },
   {
     "nama": "Dewi Lestari",
@@ -105,7 +106,7 @@
     "masa_jabatan_mulai": 2020,
     "masa_jabatan_selesai": 2025,
     "pendidikan_terakhir": "S1 Teknik Informatika",
-    "gambar": "dewi-lestari.jpg"
+    "gambar": "/app/uploads/5.jpg"
   },
   {
     "nama": "Raden Wijaya",
@@ -123,7 +124,7 @@
     "masa_jabatan_mulai": 2014,
     "masa_jabatan_selesai": 2019,
     "pendidikan_terakhir": "S1 Ilmu Perpustakaan",
-    "gambar": "raden-wijaya.jpg"
+    "gambar": "/app/uploads/6.jpg"
   },
   {
     "nama": "Linda Susanti",
@@ -141,7 +142,7 @@
     "masa_jabatan_mulai": 2021,
     "masa_jabatan_selesai": 2026,
     "pendidikan_terakhir": "S1 Ekonomi",
-    "gambar": "linda-susanti.jpg"
+    "gambar": "/app/uploads/7.jpg"
   },
   {
     "nama": "Agus Setiawan",
@@ -159,7 +160,7 @@
     "masa_jabatan_mulai": 2013,
     "masa_jabatan_selesai": 2018,
     "pendidikan_terakhir": "S2 Biologi",
-    "gambar": "agus-setiawan.jpg"
+    "gambar": "/app/uploads/8.jpg"
   },
   {
     "nama": "Putri Indah",
@@ -177,6 +178,6 @@
     "masa_jabatan_mulai": 2022,
     "masa_jabatan_selesai": 2027,
     "pendidikan_terakhir": "S1 Pertanian",
-    "gambar": "putri-indah.jpg"
+    "gambar": "/app/uploads/9.jpg"
   }
 ]

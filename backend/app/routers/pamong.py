@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, status, UploadFile, File
+from pydantic import BaseModel, Json
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
+from PIL import Image
+import io
 
 
 from app.dependencies import db_dependency, admin_dependency, user_dependency
@@ -56,21 +58,25 @@ class PamongBase(BaseModel):
     masa_jabatan_mulai: int
     masa_jabatan_selesai: int
     pendidikan_terakhir: str
-    gambar: Optional[str] = None
 
 
 @router.post("/", status_code=201)
-async def create_pamong(pamong: PamongBase, db: db_dependency):
+async def create_pamong(
+    pamong: Json[PamongBase], db: db_dependency, file: UploadFile = File(None)
+):
     if db.query(Pamong).filter(Pamong.nip == pamong.nip).first():
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Pamong already exists"
         )
 
-    if pamong.gambar:
-        gambar_path = "assets/uploads"
-        pamong.gambar = f"{gambar_path}/{pamong.gambar}"
-
     new_pamong = Pamong(**pamong.model_dump())
+
+    if file:
+        image = await file.read()
+        with open(f"app/uploads/{file.filename}", "wb") as dump:
+            dump.write(image)
+        new_pamong.gambar = file.filename
+
     db.add(new_pamong)
     db.commit()
     db.refresh(new_pamong)
