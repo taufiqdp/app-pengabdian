@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
+from datetime import date
 
 from app.models import User, Kegiatan, Pamong
 from app.dependencies import db_dependency, user_dependency, admin_dependency
@@ -79,3 +80,21 @@ def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependency):
     db.commit()
 
     return {"detail": "Pamong deleted"}
+
+
+# Get all kegiatan by date
+@router.get("/kegiatan")
+def get_kegiatan(
+    db: db_dependency, admin: admin_dependency, start_date: date, end_date: date
+):
+    kegiatan = (
+        db.query(Kegiatan)
+        .filter(Kegiatan.tanggal >= start_date)
+        .filter(Kegiatan.tanggal <= end_date)
+        .all()
+    )
+
+    if len(kegiatan) == 0 or not kegiatan:
+        return {"detail": "No kegiatan found"}
+
+    return kegiatan

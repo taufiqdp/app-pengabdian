@@ -5,6 +5,9 @@ from app.routers import auth, kegiatan, users, pamong
 from app.internal import admin
 from app.database import Base, engine
 
+#
+from app.helper import helper
+
 
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
@@ -28,3 +31,7 @@ app.include_router(users.router)
 app.include_router(kegiatan.router)
 app.include_router(admin.router)
 app.include_router(pamong.router)
+
+
+# Delete later
+app.include_router(helper.router)
