@@ -29,13 +29,19 @@ async def clear_data(db: db_dependency, table_name: Optional[str] = "all"):
 
 
 with open("app/helper/pamong.json") as f:
-    data = json.load(f)
+    data_pamong = json.load(f)
+
+with open("app/helper/user.json") as f:
+    data_user = json.load(f)
+
+with open("app/helper/kegiatan.json") as f:
+    data_kegiatan = json.load(f)
 
 
 @router.post("/add_pamong")
 async def add_pamong(db: db_dependency):
     try:
-        for item in data:
+        for item in data_pamong:
             new_item = Pamong(
                 nama=item["nama"],
                 nik=item["nik"],
@@ -61,17 +67,16 @@ async def add_pamong(db: db_dependency):
         return {"detail": "Pamong added"}
 
     except Exception as e:
-        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-with open("app/helper/user.json") as f:
-    data = json.load(f)
+
 
 
 @router.post("/add_user")
 async def add_user(db: db_dependency):
     try:
-        for item in data:
+        for item in data_user:
             pamong = db.query(Pamong).filter(Pamong.nip == item["nip"]).first()
             if pamong:
                 new_user = User(
@@ -87,17 +92,16 @@ async def add_user(db: db_dependency):
         return {"detail": "User added"}
 
     except Exception as e:
-        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-with open("app/helper/kegiatan.json") as f:
-    data = json.load(f)
+
 
 
 @router.post("/add_kegiatan")
 async def add_kegiatan(db: db_dependency):
     try:
-        for item in data:
+        for item in data_kegiatan:
             user = db.query(User).filter(User.username == item["username"]).first()
             if user:
                 for kegiatan in item["kegiatan"]:
@@ -117,4 +121,4 @@ async def add_kegiatan(db: db_dependency):
         return {"detail": "Kegiatan added"}
 
     except Exception as e:
-        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
