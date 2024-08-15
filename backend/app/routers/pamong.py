@@ -62,7 +62,9 @@ class PamongBase(BaseModel):
 
 @router.post("/", status_code=201)
 async def create_pamong(
-    pamong: Json[PamongBase], db: db_dependency, file: UploadFile = File(None)
+    pamong: Json[PamongBase],
+    db: db_dependency,
+    file: Union[UploadFile, str] = File(None),
 ):
     if db.query(Pamong).filter(Pamong.nip == pamong.nip).first():
         raise HTTPException(
@@ -96,7 +98,7 @@ async def get_pamong(db: db_dependency, user: user_dependency):
 
 
 @router.put("/")
-async def update_pamong(user: user_dependency, pamong: PamongBase, db: db_dependency):
+async def update_pamong(user: user_dependency, pamong: Json[PamongBase], db: db_dependency, file: Union[UploadFile, str] = File(None)):
     user_data = db.query(User).filter(User.id == user["id"]).first()
 
     if not user_data:
@@ -105,6 +107,11 @@ async def update_pamong(user: user_dependency, pamong: PamongBase, db: db_depend
         )
 
     pamong_to_update = user_data.pamong
+    if file:
+        image = await file.read()
+        with open(f"app/uploads/{file.filename}", "wb") as dump:
+            dump.write(image)
+        pamong_to_update.gambar = file.filename
 
     for key, value in pamong.model_dump(exclude_unset=True).items():
         setattr(pamong_to_update, key, value)
