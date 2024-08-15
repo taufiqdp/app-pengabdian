@@ -17,7 +17,3 @@ jobs:
     - name: Build Backend Docker image
       working-directory: ./backend
       run: docker build . --file Dockerfile --tag app-pengabdian-backend:$(date +%s)
-    
-    - name: Build Frontend Docker image
-      working-directory: ./frontend
-      run: docker build . --file Dockerfile --tag app-pengabdian-frontend:$(date +%s)
