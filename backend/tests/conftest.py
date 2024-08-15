@@ -74,5 +74,4 @@ def test_pamong():
         "masa_jabatan_mulai": 2017,
         "masa_jabatan_selesai": 2022,
         "pendidikan_terakhir": "S1 Teknik Sipil",
-        "image": "david-lee.jpg",
     }
