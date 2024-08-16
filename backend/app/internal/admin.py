@@ -15,6 +15,17 @@ def get_users(db: db_dependency, admin: admin_dependency):
 
     return users
 
+@router.get("/users/{user_id}")
+def get_user_by_id(user_id: int, db: db_dependency, admin: admin_dependency):
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    return user
+
 
 @router.delete("/users/{user_id}")
 def delete_user(user_id: int, db: db_dependency, admin: admin_dependency):
@@ -39,6 +50,18 @@ def delete_user(user_id: int, db: db_dependency, admin: admin_dependency):
 @router.get("/pamong")
 def get_pamong(db: db_dependency, admin: admin_dependency):
     pamong = db.query(Pamong).all()
+    if not pamong:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Pamong not found"
+        )
+
+    return pamong
+
+
+@router.get("/pamong/{pamong_id}")
+def get_pamong_by_id(pamong_id: int, db: db_dependency, admin: admin_dependency):
+    pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
+
     if not pamong:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Pamong not found"

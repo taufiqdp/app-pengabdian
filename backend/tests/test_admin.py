@@ -36,6 +36,25 @@ def test_get_user_as_admin(client, test_admin, test_user, test_pamong):
     assert len(response.json()) == 1
 
 
+def test_get_user_by_id_as_admin(client, test_admin, test_user, test_pamong):
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+    create_user(client, test_user)
+
+    # Get user id
+    response = client.post("/auth/token", data=test_user)
+    token_user = response.json()["access_token"]
+    user_id = client.get(
+        "/users/me", headers={"Authorization": f"Bearer {token_user}"}
+    ).json()["id"]
+
+    response = client.get(
+        f"/admin/users/{user_id}", headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response.status_code == 200
+    assert response.json()["id"] == user_id
+
+
 def test_delete_user_as_admin(client, test_admin, test_user, test_pamong):
     token = create_and_login_admin(client, test_admin)
     create_pamong(client, test_pamong, token)
@@ -62,6 +81,22 @@ def test_get_pamong_as_admin(client, test_admin, test_pamong):
     response = client.get("/admin/pamong", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert len(response.json()) == 1
+
+
+def test_get_pamong_by_id_as_admin(client, test_admin, test_pamong):
+    token = create_and_login_admin(client, test_admin)
+    create_pamong(client, test_pamong, token)
+
+    # Get pamong id
+    pamong_id = client.get(
+        "/admin/pamong/", headers={"Authorization": f"Bearer {token}"}
+    ).json()[0]["id"]
+
+    response = client.get(
+        f"/admin/pamong/{pamong_id}", headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response.status_code == 200
+    assert response.json()["id"] == pamong_id
 
 
 def test_update_pamong_as_admin(client, test_admin, test_pamong):
