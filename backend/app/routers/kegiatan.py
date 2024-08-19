@@ -18,7 +18,7 @@ class KegiatanCreateRequest(BaseModel):
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_kegiatan(
+async def create_kegiatan(
     kegiatan: KegiatanCreateRequest, db: db_dependency, user: user_dependency
 ):
     if user["is_admin"]:
@@ -46,7 +46,7 @@ def create_kegiatan(
 
 
 @router.get("/")
-def get_kegiatan(db: db_dependency, user: user_dependency):
+async def get_kegiatan(db: db_dependency, user: user_dependency):
     if not user["is_admin"]:
         kegiatan = db.query(Kegiatan).filter(Kegiatan.user_id == user["id"]).all()
         if len(kegiatan) < 1:
@@ -58,7 +58,7 @@ def get_kegiatan(db: db_dependency, user: user_dependency):
 
 
 @router.put("/{kegiatan_id}")
-def update_kegiatan(
+async def update_kegiatan(
     kegiatan_id: int,
     kegiatan: KegiatanCreateRequest,
     db: db_dependency,
@@ -93,7 +93,7 @@ def update_kegiatan(
 
 
 @router.delete("/{kegiatan_id}")
-def delete_kegiatan(kegiatan_id: int, db: db_dependency, user: user_dependency):
+async def delete_kegiatan(kegiatan_id: int, db: db_dependency, user: user_dependency):
     kegiatan = db.query(Kegiatan).filter(Kegiatan.id == kegiatan_id).first()
     if not kegiatan:
         raise HTTPException(
