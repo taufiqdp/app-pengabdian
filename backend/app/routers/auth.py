@@ -187,7 +187,15 @@ async def login_for_access_token_mobile(
         user.username, user.id, user.is_admin, timedelta(minutes=10)
     )
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    refresh_token = create_access_token(
+        user.username, user.id, user.is_admin, timedelta(days=7)
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "refresh_token": refresh_token,
+    }
 
 
 @router.post("/refresh-token", response_model=Token)
