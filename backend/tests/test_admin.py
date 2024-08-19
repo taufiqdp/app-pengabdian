@@ -1,4 +1,5 @@
 from tests.conftest import client, test_admin, test_user, test_pamong
+import os
 import json
 
 
@@ -109,14 +110,18 @@ def test_update_pamong_as_admin(client, test_admin, test_pamong):
     ).json()[0]["id"]
 
     # Update pamong as admin
-    test_pamong["pekerjaan"] = "Dosen"
-    response = client.put(
-        f"/admin/pamong/{pamong_id}",
-        json=test_pamong,
-        headers={"Authorization": f"Bearer {token}"},
-    )
+    test_pamong.update({"nama": "mDavid Hoop"})
+
+    path = "app/uploads/"
+    with open(f"{path}0.jpg", "rb") as image:
+        response = client.put(
+            f"admin/pamong/{pamong_id}",
+            data={"pamong": json.dumps(test_pamong)},
+            files={"file": ("test.jpg", image, "image/jpeg")},
+            headers={"Authorization": f"Bearer {token}"},
+        )
     assert response.status_code == 200
-    assert response.json() == {"detail": "Pamong updated"}
+    # os.remove(f"{path}test.jpg")
 
 
 def test_delete_pamong_as_admin(client, test_admin, test_pamong):

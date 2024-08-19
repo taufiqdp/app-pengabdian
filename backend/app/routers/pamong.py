@@ -98,7 +98,12 @@ async def get_pamong(db: db_dependency, user: user_dependency):
 
 
 @router.put("/")
-async def update_pamong(user: user_dependency, pamong: Json[PamongBase], db: db_dependency, file: Union[UploadFile, str] = File(None)):
+async def update_pamong(
+    user: user_dependency,
+    pamong: Json[PamongBase],
+    db: db_dependency,
+    file: Union[UploadFile, str] = File(None),
+):
     user_data = db.query(User).filter(User.id == user["id"]).first()
 
     if not user_data:
