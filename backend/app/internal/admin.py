@@ -1,22 +1,25 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, UploadFile, File
 from datetime import date
+from typing import Union
+from pydantic import Json
 
 from app.models import User, Kegiatan, Pamong
-from app.dependencies import db_dependency, user_dependency, admin_dependency
+from app.dependencies import db_dependency, admin_dependency
 from app.routers.pamong import PamongBase
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 @router.get("/users")
-def get_users(db: db_dependency, admin: admin_dependency):
+async def get_users(db: db_dependency, admin: admin_dependency):
 
     users = db.query(User).filter(User.is_admin == False).all()
 
     return users
 
+
 @router.get("/users/{user_id}")
-def get_user_by_id(user_id: int, db: db_dependency, admin: admin_dependency):
+async def get_user_by_id(user_id: int, db: db_dependency, admin: admin_dependency):
     user = db.query(User).filter(User.id == user_id).first()
 
     if not user:
@@ -28,7 +31,7 @@ def get_user_by_id(user_id: int, db: db_dependency, admin: admin_dependency):
 
 
 @router.delete("/users/{user_id}")
-def delete_user(user_id: int, db: db_dependency, admin: admin_dependency):
+async def delete_user(user_id: int, db: db_dependency, admin: admin_dependency):
 
     user = (
         db.query(User)
@@ -48,7 +51,7 @@ def delete_user(user_id: int, db: db_dependency, admin: admin_dependency):
 
 
 @router.get("/pamong")
-def get_pamong(db: db_dependency, admin: admin_dependency):
+async def get_pamong(db: db_dependency, admin: admin_dependency):
     pamong = db.query(Pamong).all()
     if not pamong:
         raise HTTPException(
@@ -59,7 +62,7 @@ def get_pamong(db: db_dependency, admin: admin_dependency):
 
 
 @router.get("/pamong/{pamong_id}")
-def get_pamong_by_id(pamong_id: int, db: db_dependency, admin: admin_dependency):
+async def get_pamong_by_id(pamong_id: int, db: db_dependency, admin: admin_dependency):
     pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
 
     if not pamong:
@@ -71,8 +74,12 @@ def get_pamong_by_id(pamong_id: int, db: db_dependency, admin: admin_dependency)
 
 
 @router.put("/pamong/{pamong_id}")
-def update_pamong(
-    pamong_id: int, pamong: PamongBase, db: db_dependency, admin: admin_dependency
+async def update_pamong(
+    pamong_id: int,
+    pamong: Json[PamongBase],
+    db: db_dependency,
+    admin: admin_dependency,
+    file: Union[UploadFile, str] = File(None),
 ):
     pamong_data = db.query(Pamong).filter(Pamong.id == pamong_id).first()
 
@@ -80,6 +87,12 @@ def update_pamong(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Pamong not found"
         )
+
+    if file:
+        image = await file.read()
+        with open(f"app/uploads/{file.filename}", "wb") as dump:
+            dump.write(image)
+        pamong_data.gambar = file.filename
 
     for key, value in pamong.model_dump(exclude_unset=True).items():
         setattr(pamong_data, key, value)
@@ -91,7 +104,7 @@ def update_pamong(
 
 
 @router.delete("/pamong/{pamong_id}")
-def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependency):
+async def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependency):
     pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
 
     if not pamong:
@@ -107,7 +120,7 @@ def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependency):
 
 # Get all kegiatan by date
 @router.get("/kegiatan")
-def get_kegiatan(
+async def get_kegiatan(
     db: db_dependency, admin: admin_dependency, start_date: date, end_date: date
 ):
     kegiatan = (
