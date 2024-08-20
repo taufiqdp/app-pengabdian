@@ -73,11 +73,12 @@ async def create_pamong(
 
     new_pamong = Pamong(**pamong.model_dump())
 
+    uploads_path = "app/uploads/"
     if file:
         image = await file.read()
-        with open(f"app/uploads/{file.filename}", "wb") as dump:
+        with open(f"{uploads_path}{file.filename}", "wb") as dump:
             dump.write(image)
-        new_pamong.gambar = file.filename
+        new_pamong.gambar = f"{uploads_path}{file.filename}"
 
     db.add(new_pamong)
     db.commit()

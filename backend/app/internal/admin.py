@@ -1,7 +1,9 @@
 from fastapi import APIRouter, HTTPException, status, UploadFile, File
+from fastapi.responses import FileResponse
 from datetime import date
 from typing import Union
 from pydantic import Json
+from pathlib import Path
 
 from app.models import User, Kegiatan, Pamong
 from app.dependencies import db_dependency, admin_dependency
@@ -88,11 +90,14 @@ async def update_pamong(
             status_code=status.HTTP_404_NOT_FOUND, detail="Pamong not found"
         )
 
+    uploads_path = "app/uploads/"
+
     if file:
         image = await file.read()
-        with open(f"app/uploads/{file.filename}", "wb") as dump:
+        image_path = f"{uploads_path}{file.filename}"
+        with open(image_path, "wb") as dump:
             dump.write(image)
-        pamong_data.gambar = file.filename
+        pamong_data.gambar = image_path
 
     for key, value in pamong.model_dump(exclude_unset=True).items():
         setattr(pamong_data, key, value)
@@ -116,6 +121,23 @@ async def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependen
     db.commit()
 
     return {"detail": "Pamong deleted"}
+
+
+@router.get("/pamong/{pamong_id}/image")
+async def get_pamong_image(pamong_id: int, db: db_dependency):
+    pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
+
+    if not pamong:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Pamong not found"
+        )
+
+    try:
+        return FileResponse(pamong.gambar)
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Image not found"
+        )
 
 
 # Get all kegiatan by date
