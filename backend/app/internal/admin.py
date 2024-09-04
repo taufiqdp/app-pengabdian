@@ -141,9 +141,7 @@ async def get_pamong_image(pamong_id: int, db: db_dependency):
 
 # Get all kegiatan by date
 @router.get("/kegiatan")
-async def get_kegiatan(
-    db: db_dependency, start_date: date, end_date: date
-):
+async def get_kegiatan(db: db_dependency, start_date: date, end_date: date):
     kegiatan_all = (
         db.query(Kegiatan)
         .filter(Kegiatan.tanggal >= start_date)
@@ -164,7 +162,7 @@ async def get_kegiatan(
             "gambar": kegiatan.gambar,
             "user_id": kegiatan.user_id,
             "nama_pamong": kegiatan.user.pamong.nama,
-            "pamong_id": kegiatan.user.pamong.id
+            "pamong_id": kegiatan.user.pamong.id,
         }
         for kegiatan in kegiatan_all
     ]
@@ -173,7 +171,9 @@ async def get_kegiatan(
 
 
 @router.get("/kegiatan/{kegiatan_id}")
-async def get_kegiatan_by_id(kegiatan_id: int, db: db_dependency, admin: admin_dependency):
+async def get_kegiatan_by_id(
+    kegiatan_id: int, db: db_dependency, admin: admin_dependency
+):
     kegiatan = db.query(Kegiatan).filter(Kegiatan.id == kegiatan_id).first()
 
     if not kegiatan:
@@ -189,7 +189,7 @@ async def get_kegiatan_by_id(kegiatan_id: int, db: db_dependency, admin: admin_d
         "deskripsi": kegiatan.deskripsi,
         "gambar": kegiatan.gambar,
         "user_id": kegiatan.user_id,
-        "nama_pamong": kegiatan.user.pamong.nama
+        "nama_pamong": kegiatan.user.pamong.nama,
     }
 
     return kegiatan
