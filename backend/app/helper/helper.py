@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Optional
 
 from app.dependencies import db_dependency
-from app.models import Pamong, User, Kegiatan
+from app.models import Pamong, User, Kegiatan, Agenda
 from app.dependencies import bcrypt_context
 
 
@@ -36,6 +36,9 @@ with open("app/helper/user.json") as f:
 
 with open("app/helper/kegiatan.json") as f:
     data_kegiatan = json.load(f)
+
+with open("app/helper/agenda.json") as f:
+    data_agenda = json.load(f)
 
 
 @router.post("/add_pamong", status_code=201)
@@ -114,5 +117,28 @@ async def add_kegiatan(db: db_dependency):
         db.commit()
         return {"detail": "Kegiatan added"}
 
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@router.post("/add_agenda", status_code=201)
+async def add_agenda(db: db_dependency):
+    try:
+        for item in data_agenda:
+            new_item = Agenda(
+                nama_agenda=item["nama_agenda"],
+                tanggal_mulai=datetime.strptime(
+                    item["tanggal_mulai"], "%Y-%m-%dT%H:%M:%S"
+                ),
+                tanggal_selesai=datetime.strptime(
+                    item["tanggal_selesai"], "%Y-%m-%dT%H:%M:%S"
+                ),
+                tempat=item["tempat"],
+                deskripsi=item["deskripsi"],
+            )
+            db.add(new_item)
+        db.commit()
+        return {"detail": "Agenda added"}
+    
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
