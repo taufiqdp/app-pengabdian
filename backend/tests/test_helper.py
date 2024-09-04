@@ -27,3 +27,9 @@ def test_add_user(client):
     response = client.post("/helper/add_user")
     print(response.json())
     assert response.status_code == 201
+
+
+def test_add_agenda(client):
+    response = client.post("/helper/add_agenda")
+    print(response.json())
+    assert response.status_code == 201
