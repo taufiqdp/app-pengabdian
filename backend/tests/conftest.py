@@ -75,3 +75,13 @@ def test_pamong():
         "masa_jabatan_selesai": 2022,
         "pendidikan_terakhir": "S1 Teknik Sipil",
     }
+
+
+@pytest.fixture(scope="function")
+def test_kegiatan():
+    return {
+        "nama_kegiatan": "Kegiatan 1",
+        "tanggal": "2022-12-12",
+        "tempat": "Tempat 1",
+        "deskripsi": "Deskripsi 1",
+    }
