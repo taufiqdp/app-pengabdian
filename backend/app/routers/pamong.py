@@ -113,6 +113,7 @@ async def update_pamong(
         )
 
     pamong_to_update = user_data.pamong
+
     if file:
         image = await file.read()
         with open(f"app/uploads/{file.filename}", "wb") as dump:
