@@ -62,3 +62,14 @@ class Kegiatan(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
 
     user = relationship("User", back_populates="kegiatan")
+
+
+class Agenda(Base):
+    __tablename__ = "agenda"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nama_agenda = Column(String(50))
+    tanggal_mulai = Column(Date)
+    tanggal_selesai = Column(Date)
+    tempat = Column(String(50))
+    deskripsi = Column(String(2000))
