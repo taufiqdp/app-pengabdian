@@ -85,3 +85,14 @@ def test_kegiatan():
         "tempat": "Tempat 1",
         "deskripsi": "Deskripsi 1",
     }
+
+
+@pytest.fixture(scope="function")
+def test_agenda():
+    return {
+        "nama_agenda": "Agenda 1",
+        "tanggal_mulai": "2022-12-12T06:50:18.299Z",
+        "tanggal_selesai": "2022-12-12T10:00:00.299Z",
+        "tempat": "Tempat 1",
+        "deskripsi": "Deskripsi 1",
+    }
