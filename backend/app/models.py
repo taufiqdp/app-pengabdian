@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Date, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Date, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -69,7 +69,7 @@ class Agenda(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nama_agenda = Column(String(50))
-    tanggal_mulai = Column(Date)
-    tanggal_selesai = Column(Date)
+    tanggal_mulai = Column(DateTime)
+    tanggal_selesai = Column(DateTime)
     tempat = Column(String(50))
     deskripsi = Column(String(2000))

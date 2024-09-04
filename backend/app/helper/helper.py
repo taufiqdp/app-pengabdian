@@ -18,6 +18,7 @@ async def clear_data(db: db_dependency, table_name: Optional[str] = "all"):
         db.execute(text("DELETE FROM pamong"))
         db.execute(text("DELETE FROM user"))
         db.execute(text("DELETE FROM kegiatan"))
+        db.execute(text("DELETE FROM agenda"))
         db.commit()
 
         return {"detail": "All tables cleared"}
