@@ -23,7 +23,7 @@ app.add_middleware(
 
 @app.get("/")
 def health_check():
-    return {"status": "ok", "last_updated": "2024-09-04T20:29:00"}
+    return {"status": "ok", "last_updated": "2024-09-05T10:20:00"}
 
 
 app.include_router(auth.router)
