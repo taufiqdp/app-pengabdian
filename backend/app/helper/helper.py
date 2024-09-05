@@ -140,6 +140,6 @@ async def add_agenda(db: db_dependency):
             db.add(new_item)
         db.commit()
         return {"detail": "Agenda added"}
-    
+
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
