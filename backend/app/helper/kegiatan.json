@@ -6,39 +6,32 @@
     "email": "dlee1987@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Rapat Koordinasi",
-        "tanggal": "2023-03-08T10:00:00.000Z",
+        "nama_kegiatan": "Workshop Pengembangan Kurikulum",
+        "tanggal": "2024-09-05T10:00:00.000Z",
         "tempat": "Ruang Rapat Utama",
-        "deskripsi": "Pembahasan program kerja tahunan",
-        "gambar": "rapat-koordinasi.jpg"
+        "deskripsi": "Merancang kurikulum baru untuk tahun ajaran mendatang",
+        "gambar": "workshop-kurikulum.jpg"
       },
       {
-        "nama_kegiatan": "Pelatihan Kepemimpinan",
-        "tanggal": "2023-03-15T09:00:00.000Z",
+        "nama_kegiatan": "Pelatihan Peningkatan Kompetensi Guru",
+        "tanggal": "2024-09-12T09:00:00.000Z",
         "tempat": "Gedung Diklat",
-        "deskripsi": "Meningkatkan kemampuan kepemimpinan",
-        "gambar": "pelatihan-kepemimpinan.jpg"
+        "deskripsi": "Meningkatkan kualitas pengajaran guru",
+        "gambar": "pelatihan-guru.jpg"
       },
       {
-        "nama_kegiatan": "Sosialisasi Program Baru",
-        "tanggal": "2023-03-22T14:00:00.000Z",
-        "tempat": "Aula Kantor",
-        "deskripsi": "Mengenalkan program baru kepada seluruh staf",
-        "gambar": "sosialisasi-program-baru.jpg"
+        "nama_kegiatan": "Rapat Persiapan Ujian Tengah Semester",
+        "tanggal": "2024-09-19T14:00:00.000Z",
+        "tempat": "Ruang Guru",
+        "deskripsi": "Membahas persiapan pelaksanaan UTS",
+        "gambar": "rapat-uts.jpg"
       },
       {
-        "nama_kegiatan": "Kunker ke Luar Kota",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Kota X",
-        "deskripsi": "Studi banding ke instansi terkait",
-        "gambar": "kunker-luar-kota.jpg"
-      },
-      {
-        "nama_kegiatan": "Evaluasi Kinerja",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Ruang Rapat",
-        "deskripsi": "Penilaian kinerja seluruh staf",
-        "gambar": "evaluasi-kinerja.jpg"
+        "nama_kegiatan": "Kunjungan Studi ke Sekolah Benchmark",
+        "tanggal": "2024-09-26T08:00:00.000Z",
+        "tempat": "SMA Unggulan X",
+        "deskripsi": "Belajar dari praktik baik sekolah lain",
+        "gambar": "kunjungan-studi.jpg"
       }
     ]
   },
@@ -49,39 +42,32 @@
     "email": "snurhaliza1992@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Input Data",
-        "tanggal": "2023-03-08T10:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Memasukkan data ke sistem",
-        "gambar": "input-data.jpg"
+        "nama_kegiatan": "Pendataan Siswa Baru",
+        "tanggal": "2024-09-03T10:00:00.000Z",
+        "tempat": "Kantor Tata Usaha",
+        "deskripsi": "Mengumpulkan data siswa baru tahun ajaran 2024/2025",
+        "gambar": "pendataan-siswa.jpg"
       },
       {
-        "nama_kegiatan": "Menyiapkan Dokumen",
-        "tanggal": "2023-03-15T09:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Melakukan pengecekan dan penyuntingan dokumen",
-        "gambar": "menetapkan-dokumen.jpg"
+        "nama_kegiatan": "Pengolahan Data Nilai Siswa",
+        "tanggal": "2024-09-10T09:00:00.000Z",
+        "tempat": "Ruang TU",
+        "deskripsi": "Memproses nilai siswa dan rapor",
+        "gambar": "pengolahan-nilai.jpg"
       },
       {
-        "nama_kegiatan": "Rapat Internal",
-        "tanggal": "2023-03-22T14:00:00.000Z",
+        "nama_kegiatan": "Rapat Persiapan Penerimaan Raport",
+        "tanggal": "2024-09-17T14:00:00.000Z",
         "tempat": "Ruang Rapat",
-        "deskripsi": "Diskusi internal terkait tugas administrasi",
-        "gambar": "rapat-internal.jpg"
+        "deskripsi": "Membahas teknis pembagian raport siswa",
+        "gambar": "rapat-raport.jpg"
       },
       {
-        "nama_kegiatan": "Menjawab Surat",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Membuat balasan surat masuk",
-        "gambar": "menjawab-surat.jpg"
-      },
-      {
-        "nama_kegiatan": "Melayani Pengunjung",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Memberikan informasi dan pelayanan kepada pengunjung",
-        "gambar": "melayani-pengunjung.jpg"
+        "nama_kegiatan": "Pengarsipan Dokumen Akademik",
+        "tanggal": "2024-09-24T08:00:00.000Z",
+        "tempat": "Ruang Arsip",
+        "deskripsi": "Menyimpan dan mengelola dokumen akademik",
+        "gambar": "arsip-akademik.jpg"
       }
     ]
   },
@@ -92,39 +78,32 @@
     "email": "bsantoso1985@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Rapat Tim",
-        "tanggal": "2023-03-08T10:00:00.000Z",
-        "tempat": "Ruang Rapat Seksi",
-        "deskripsi": "Membahas rencana kerja seksi",
-        "gambar": "rapat-tim.jpg"
+        "nama_kegiatan": "Rapat Koordinasi Ekstrakurikuler",
+        "tanggal": "2024-09-04T10:00:00.000Z",
+        "tempat": "Ruang OSIS",
+        "deskripsi": "Membahas program kegiatan ekstrakurikuler",
+        "gambar": "rapat-ekskul.jpg"
       },
       {
-        "nama_kegiatan": "Pembinaan Staf",
-        "tanggal": "2023-03-15T09:00:00.000Z",
-        "tempat": "Ruang Kerja",
-        "deskripsi": "Memberikan arahan dan bimbingan kepada staf",
-        "gambar": "pembinaan-staf.jpg"
+        "nama_kegiatan": "Pembinaan Tim Olimpiade Sains",
+        "tanggal": "2024-09-11T09:00:00.000Z",
+        "tempat": "Laboratorium IPA",
+        "deskripsi": "Melatih siswa untuk persiapan olimpiade sains",
+        "gambar": "pembinaan-olimpiade.jpg"
       },
       {
-        "nama_kegiatan": "Evaluasi Program",
-        "tanggal": "2023-03-22T14:00:00.000Z",
-        "tempat": "Ruang Rapat",
-        "deskripsi": "Mengevaluasi pelaksanaan program seksi",
-        "gambar": "evaluasi-program.jpg"
+        "nama_kegiatan": "Pendampingan Lomba Debat Bahasa Inggris",
+        "tanggal": "2024-09-18T14:00:00.000Z",
+        "tempat": "Ruang Bahasa",
+        "deskripsi": "Mempersiapkan siswa untuk lomba debat",
+        "gambar": "pendampingan-debat.jpg"
       },
       {
-        "nama_kegiatan": "Sosialisasi Kebijakan",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Aula Kantor",
-        "deskripsi": "Mengenalkan kebijakan baru kepada masyarakat",
-        "gambar": "sosialisasi-kebijakan.jpg"
-      },
-      {
-        "nama_kegiatan": "Pengawasan Lapangan",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Lokasi Proyek",
-        "deskripsi": "Memeriksa pelaksanaan proyek di lapangan",
-        "gambar": "pengawasan-lapangan.jpg"
+        "nama_kegiatan": "Persiapan Pentas Seni Sekolah",
+        "tanggal": "2024-09-25T08:00:00.000Z",
+        "tempat": "Aula Sekolah",
+        "deskripsi": "Melatih siswa untuk pentas seni akhir semester",
+        "gambar": "persiapan-pentas-seni.jpg"
       }
     ]
   },
@@ -135,39 +114,32 @@
     "email": "mchristina1990@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Riset Kebijakan",
-        "tanggal": "2023-03-08T10:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Melakukan pengumpulan data dan analisis kebijakan",
-        "gambar": "riset-kebijakan.jpg"
+        "nama_kegiatan": "Penyusunan Rencana Program Bimbingan Konseling",
+        "tanggal": "2024-09-06T10:00:00.000Z",
+        "tempat": "Ruang BK",
+        "deskripsi": "Merencanakan program BK untuk semester 1",
+        "gambar": "rencana-bk.jpg"
       },
       {
-        "nama_kegiatan": "Rapat Koordinasi",
-        "tanggal": "2023-03-15T09:00:00.000Z",
-        "tempat": "Ruang Rapat",
-        "deskripsi": "Diskusi dengan stakeholder terkait kebijakan",
-        "gambar": "rapat-koordinasi.jpg"
+        "nama_kegiatan": "Konseling Individu Siswa",
+        "tanggal": "2024-09-13T09:00:00.000Z",
+        "tempat": "Ruang BK",
+        "deskripsi": "Memberikan konseling kepada siswa yang membutuhkan",
+        "gambar": "konseling-individu.jpg"
       },
       {
-        "nama_kegiatan": "Penyusunan Draf Kebijakan",
-        "tanggal": "2023-03-22T14:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Membuat draf kebijakan baru",
-        "gambar": "penyusunan-draf-kebijakan.jpg"
+        "nama_kegiatan": "Seminar Parenting untuk Orang Tua",
+        "tanggal": "2024-09-20T14:00:00.000Z",
+        "tempat": "Aula Sekolah",
+        "deskripsi": "Memberikan edukasi tentang parenting kepada orang tua",
+        "gambar": "seminar-parenting.jpg"
       },
       {
-        "nama_kegiatan": "Sosialisasi Kebijakan",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Aula Kantor",
-        "deskripsi": "Mengenalkan kebijakan baru kepada publik",
-        "gambar": "sosialisasi-kebijakan.jpg"
-      },
-      {
-        "nama_kegiatan": "Evaluasi Kebijakan",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Ruang Rapat",
-        "deskripsi": "Menilai efektivitas pelaksanaan kebijakan",
-        "gambar": "evaluasi-kebijakan.jpg"
+        "nama_kegiatan": "Kunjungan Rumah Siswa",
+        "tanggal": "2024-09-27T08:00:00.000Z",
+        "tempat": "Rumah Siswa X",
+        "deskripsi": "Melakukan kunjungan rumah untuk mengetahui kondisi siswa",
+        "gambar": "kunjungan-rumah.jpg"
       }
     ]
   },
@@ -178,39 +150,32 @@
     "email": "afauzi1988@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Audit Internal",
-        "tanggal": "2023-03-08T10:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Melakukan audit terhadap keuangan internal",
-        "gambar": "audit-internal.jpg"
+        "nama_kegiatan": "Audit Keuangan Sekolah",
+        "tanggal": "2024-09-02T10:00:00.000Z",
+        "tempat": "Ruang Keuangan",
+        "deskripsi": "Memeriksa laporan keuangan sekolah",
+        "gambar": "audit-keuangan.jpg"
       },
       {
-        "nama_kegiatan": "Pelatihan Audit",
-        "tanggal": "2023-03-15T09:00:00.000Z",
-        "tempat": "Gedung Diklat",
-        "deskripsi": "Meningkatkan kemampuan audit",
-        "gambar": "pelatihan-audit.jpg"
+        "nama_kegiatan": "Penyusunan Laporan Keuangan",
+        "tanggal": "2024-09-09T09:00:00.000Z",
+        "tempat": "Ruang Keuangan",
+        "deskripsi": "Membuat laporan keuangan triwulan 3",
+        "gambar": "laporan-keuangan.jpg"
       },
       {
-        "nama_kegiatan": "Audit Lapangan",
-        "tanggal": "2023-03-22T14:00:00.000Z",
-        "tempat": "Lokasi Audit",
-        "deskripsi": "Melakukan pemeriksaan lapangan",
-        "gambar": "audit-lapangan.jpg"
-      },
-      {
-        "nama_kegiatan": "Penyusunan Laporan Audit",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Membuat laporan hasil audit",
-        "gambar": "penyusunan-laporan-audit.jpg"
-      },
-      {
-        "nama_kegiatan": "Presentasi Hasil Audit",
-        "tanggal": "2023-04-05T15:00:00.000Z",
+        "nama_kegiatan": "Rapat Pembahasan Anggaran Sekolah",
+        "tanggal": "2024-09-16T14:00:00.000Z",
         "tempat": "Ruang Rapat",
-        "deskripsi": "Mempresentasikan hasil audit kepada pihak terkait",
-        "gambar": "presentasi-hasil-audit.jpg"
+        "deskripsi": "Membahas alokasi dana BOS",
+        "gambar": "rapat-anggaran.jpg"
+      },
+      {
+        "nama_kegiatan": "Pengadaan Barang dan Jasa",
+        "tanggal": "2024-09-23T08:00:00.000Z",
+        "tempat": "Ruang TU",
+        "deskripsi": "Melakukan proses pengadaan untuk kebutuhan sekolah",
+        "gambar": "pengadaan.jpg"
       }
     ]
   },
@@ -221,39 +186,32 @@
     "email": "dlestari1991@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Pemeliharaan Server",
-        "tanggal": "2023-03-08T10:00:00.000Z",
+        "nama_kegiatan": "Pemeliharaan Jaringan Internet Sekolah",
+        "tanggal": "2024-09-03T10:00:00.000Z",
         "tempat": "Ruang Server",
-        "deskripsi": "Melakukan pengecekan dan perawatan server",
-        "gambar": "pemeliharaan-server.jpg"
+        "deskripsi": "Memastikan jaringan internet berfungsi dengan baik",
+        "gambar": "pemeliharaan-jaringan.jpg"
       },
       {
-        "nama_kegiatan": "Instalasi Perangkat Lunak",
-        "tanggal": "2023-03-15T09:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Memasang perangkat lunak baru",
-        "gambar": "instalasi-perangkat-lunak.jpg"
+        "nama_kegiatan": "Perbaikan Komputer di Lab. Komputer",
+        "tanggal": "2024-09-10T09:00:00.000Z",
+        "tempat": "Lab. Komputer",
+        "deskripsi": "Memperbaiki komputer yang rusak",
+        "gambar": "perbaikan-komputer.jpg"
       },
       {
-        "nama_kegiatan": "Troubleshooting Jaringan",
-        "tanggal": "2023-03-22T14:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Memecahkan masalah jaringan komputer",
-        "gambar": "troubleshooting-jaringan.jpg"
+        "nama_kegiatan": "Instalasi Software Pembelajaran",
+        "tanggal": "2024-09-17T14:00:00.000Z",
+        "tempat": "Lab. Bahasa",
+        "deskripsi": "Memasang software baru untuk pembelajaran bahasa",
+        "gambar": "instalasi-software.jpg"
       },
       {
-        "nama_kegiatan": "Pelatihan Penggunaan Aplikasi",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Aula Kantor",
-        "deskripsi": "Melatih pengguna dalam menggunakan aplikasi baru",
-        "gambar": "pelatihan-penggunaan-aplikasi.jpg"
-      },
-      {
-        "nama_kegiatan": "Backup Data",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Ruang Server",
-        "deskripsi": "Membuat cadangan data penting",
-        "gambar": "backup-data.jpg"
+        "nama_kegiatan": "Pelatihan Penggunaan Aplikasi E-learning",
+        "tanggal": "2024-09-24T08:00:00.000Z",
+        "tempat": "Ruang Guru",
+        "deskripsi": "Melatih guru menggunakan platform e-learning",
+        "gambar": "pelatihan-e-learning.jpg"
       }
     ]
   },
@@ -264,39 +222,32 @@
     "email": "rwijaya1986@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Klasifikasi Arsip",
-        "tanggal": "2023-03-08T10:00:00.000Z",
+        "nama_kegiatan": "Penataan Arsip Nilai Siswa",
+        "tanggal": "2024-09-05T10:00:00.000Z",
         "tempat": "Ruang Arsip",
-        "deskripsi": "Memilah dan mengklasifikasikan arsip",
-        "gambar": "klasifikasi-arsip.jpg"
+        "deskripsi": "Menyusun arsip nilai siswa secara rapi",
+        "gambar": "arsip-nilai.jpg"
       },
       {
-        "nama_kegiatan": "Inventarisasi Arsip",
-        "tanggal": "2023-03-15T09:00:00.000Z",
+        "nama_kegiatan": "Pengarsipan Ijazah dan SKHU",
+        "tanggal": "2024-09-12T09:00:00.000Z",
         "tempat": "Ruang Arsip",
-        "deskripsi": "Mencatat dan mendata arsip",
-        "gambar": "inventarisasi-arsip.jpg"
+        "deskripsi": "Mengamankan ijazah dan SKHU lulusan",
+        "gambar": "arsip-ijazah.jpg"
       },
       {
-        "nama_kegiatan": "Penataan Arsip",
-        "tanggal": "2023-03-22T14:00:00.000Z",
+        "nama_kegiatan": "Digitalisasi Arsip Penting",
+        "tanggal": "2024-09-19T14:00:00.000Z",
         "tempat": "Ruang Arsip",
-        "deskripsi": "Menata arsip secara sistematis",
-        "gambar": "penataan-arsip.jpg"
+        "deskripsi": "Memindai dokumen penting ke bentuk digital",
+        "gambar": "digitalisasi-arsip.jpg"
       },
       {
-        "nama_kegiatan": "Pelayanan Arsip",
-        "tanggal": "2023-03-29T08:00:00.000Z",
+        "nama_kegiatan": "Pembuatan Database Arsip",
+        "tanggal": "2024-09-26T08:00:00.000Z",
         "tempat": "Ruang Arsip",
-        "deskripsi": "Memberikan pelayanan pengambilan dan pengembalian arsip",
-        "gambar": "pelayanan-arsip.jpg"
-      },
-      {
-        "nama_kegiatan": "Sosialisasi Kearsipan",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Aula Kantor",
-        "deskripsi": "Mengenalkan pentingnya kearsipan kepada staf",
-        "gambar": "sosialisasi-kearsipan.jpg"
+        "deskripsi": "Membuat database arsip untuk memudahkan pencarian",
+        "gambar": "database-arsip.jpg"
       }
     ]
   },
@@ -307,39 +258,32 @@
     "email": "lsusanti1993@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Penerimaan Kas",
-        "tanggal": "2023-03-08T10:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Menerima uang kas masuk",
-        "gambar": "penerimaan-kas.jpg"
+        "nama_kegiatan": "Penerimaan Pembayaran SPP",
+        "tanggal": "2024-09-04T10:00:00.000Z",
+        "tempat": "Ruang Keuangan",
+        "deskripsi": "Menerima pembayaran SPP dari siswa",
+        "gambar": "penerimaan-spp.jpg"
       },
       {
-        "nama_kegiatan": "Pembuatan Bukti Penerimaan",
-        "tanggal": "2023-03-15T09:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Membuat bukti penerimaan uang kas",
-        "gambar": "pembuatan-bukti-penerimaan.jpg"
+        "nama_kegiatan": "Pencatatan Transaksi Keuangan",
+        "tanggal": "2024-09-11T09:00:00.000Z",
+        "tempat": "Ruang Keuangan",
+        "deskripsi": "Mencatat semua transaksi keuangan sekolah",
+        "gambar": "pencatatan-keuangan.jpg"
       },
       {
-        "nama_kegiatan": "Pembayaran Kas",
-        "tanggal": "2023-03-22T14:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Melakukan pembayaran uang kas keluar",
-        "gambar": "pembayaran-kas.jpg"
+        "nama_kegiatan": "Pembuatan Laporan Keuangan Bulanan",
+        "tanggal": "2024-09-18T14:00:00.000Z",
+        "tempat": "Ruang Keuangan",
+        "deskripsi": "Membuat laporan keuangan bulanan September",
+        "gambar": "laporan-bulanan.jpg"
       },
       {
-        "nama_kegiatan": "Rekonsiliasi Bank",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Memeriksa dan mencocokkan saldo bank",
-        "gambar": "rekonsiliasi-bank.jpg"
-      },
-      {
-        "nama_kegiatan": "Laporan Keuangan",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Membuat laporan keuangan bulanan",
-        "gambar": "laporan-keuangan.jpg"
+        "nama_kegiatan": "Pengelolaan Dana BOS",
+        "tanggal": "2024-09-25T08:00:00.000Z",
+        "tempat": "Ruang Keuangan",
+        "deskripsi": "Memastikan penggunaan dana BOS sesuai aturan",
+        "gambar": "pengelolaan-bos.jpg"
       }
     ]
   },
@@ -350,39 +294,32 @@
     "email": "asetiawan1984@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Riset Lapangan",
-        "tanggal": "2023-03-08T10:00:00.000Z",
-        "tempat": "Lokasi Riset",
-        "deskripsi": "Melakukan pengumpulan data di lapangan",
-        "gambar": "riset-lapangan.jpg"
+        "nama_kegiatan": "Penelitian Tindakan Kelas",
+        "tanggal": "2024-09-06T10:00:00.000Z",
+        "tempat": "Kelas X-IPA",
+        "deskripsi": "Melakukan penelitian untuk meningkatkan kualitas pembelajaran",
+        "gambar": "ptk.jpg"
       },
       {
-        "nama_kegiatan": "Analisis Data",
-        "tanggal": "2023-03-15T09:00:00.000Z",
-        "tempat": "Laboratorium",
-        "deskripsi": "Menganalisis data hasil riset",
-        "gambar": "analisis-data.jpg"
+        "nama_kegiatan": "Analisis Hasil Ulangan Harian",
+        "tanggal": "2024-09-13T09:00:00.000Z",
+        "tempat": "Ruang Guru",
+        "deskripsi": "Menganalisis hasil ulangan untuk evaluasi pembelajaran",
+        "gambar": "analisis-ulangan.jpg"
       },
       {
-        "nama_kegiatan": "Seminar Ilmiah",
-        "tanggal": "2023-03-22T14:00:00.000Z",
-        "tempat": "Aula Kantor",
-        "deskripsi": "Mempresentasikan hasil riset di seminar",
-        "gambar": "seminar-ilmiah.jpg"
+        "nama_kegiatan": "Penyusunan Soal Ujian Tengah Semester",
+        "tanggal": "2024-09-20T14:00:00.000Z",
+        "tempat": "Ruang Guru",
+        "deskripsi": "Membuat soal UTS untuk mata pelajaran fisika",
+        "gambar": "soal-uts.jpg"
       },
       {
-        "nama_kegiatan": "Publikasi Jurnal",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Kantor",
-        "deskripsi": "Menerbitkan hasil riset di jurnal ilmiah",
-        "gambar": "publikasi-jurnal.jpg"
-      },
-      {
-        "nama_kegiatan": "Pelatihan Riset",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Gedung Diklat",
-        "deskripsi": "Melatih peneliti muda dalam melakukan riset",
-        "gambar": "pelatihan-riset.jpg"
+        "nama_kegiatan": "Bimbingan Belajar Siswa",
+        "tanggal": "2024-09-27T08:00:00.000Z",
+        "tempat": "Ruang Kelas",
+        "deskripsi": "Memberikan bimbingan belajar kepada siswa yang kesulitan",
+        "gambar": "bimbel.jpg"
       }
     ]
   },
@@ -393,39 +330,32 @@
     "email": "pindah1995@example.com",
     "kegiatan": [
       {
-        "nama_kegiatan": "Sosialisasi Teknik Budidaya",
-        "tanggal": "2023-03-08T10:00:00.000Z",
-        "tempat": "Desa X",
-        "deskripsi": "Mengenalkan teknik budidaya tanaman baru kepada petani",
-        "gambar": "sosialisasi-teknik-budidaya.jpg"
+        "nama_kegiatan": "Pendampingan PKL Siswa",
+        "tanggal": "2024-09-03T10:00:00.000Z",
+        "tempat": "PT. X",
+        "deskripsi": "Mendampingi siswa yang sedang PKL di industri",
+        "gambar": "pkl.jpg"
       },
       {
-        "nama_kegiatan": "Penyuluhan Hama dan Penyakit",
-        "tanggal": "2023-03-15T09:00:00.000Z",
-        "tempat": "Desa Y",
-        "deskripsi": "Memberikan informasi tentang pengendalian hama dan penyakit tanaman",
-        "gambar": "penyuluhan-hama-penyakit.jpg"
+        "nama_kegiatan": "Kunjungan ke Dunia Industri",
+        "tanggal": "2024-09-10T09:00:00.000Z",
+        "tempat": "Pabrik Y",
+        "deskripsi": "Menjajaki kerjasama dengan industri untuk penyaluran lulusan",
+        "gambar": "kunjungan-industri.jpg"
       },
       {
-        "nama_kegiatan": "Demo Lapangan",
-        "tanggal": "2023-03-22T14:00:00.000Z",
-        "tempat": "Kebun Percontohan",
-        "deskripsi": "Menunjukkan praktik budidaya tanaman yang baik",
-        "gambar": "demo-lapangan.jpg"
+        "nama_kegiatan": "Pelatihan Keterampilan Kerja",
+        "tanggal": "2024-09-17T14:00:00.000Z",
+        "tempat": "Bengkel Sekolah",
+        "deskripsi": "Melatih siswa keterampilan teknik dasar",
+        "gambar": "pelatihan-kerja.jpg"
       },
       {
-        "nama_kegiatan": "Kunjungan ke Petani",
-        "tanggal": "2023-03-29T08:00:00.000Z",
-        "tempat": "Desa Z",
-        "deskripsi": "Memberikan pendampingan dan konsultasi kepada petani",
-        "gambar": "kunjungan-ke-petani.jpg"
-      },
-      {
-        "nama_kegiatan": "Pameran Pertanian",
-        "tanggal": "2023-04-05T15:00:00.000Z",
-        "tempat": "Gedung Pameran",
-        "deskripsi": "Menampilkan hasil produk pertanian dan teknologi baru",
-        "gambar": "pameran-pertanian.jpg"
+        "nama_kegiatan": "Bursa Kerja Khusus (BKK)",
+        "tanggal": "2024-09-24T08:00:00.000Z",
+        "tempat": "Aula Sekolah",
+        "deskripsi": "Memfasilitasi pertemuan antara lulusan dan perusahaan",
+        "gambar": "bkk.jpg"
       }
     ]
   }
