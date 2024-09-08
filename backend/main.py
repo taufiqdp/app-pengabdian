@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 
 from app.routers import auth, kegiatan, users, pamong, agenda
 from app.internal import admin
 from app.database import Base, engine
 
 #
-from app.helper import helper
+# from app.helper import helper
 
 
 app = FastAPI()
@@ -35,4 +36,8 @@ app.include_router(agenda.router)
 
 
 # Delete later
-app.include_router(helper.router)
+# app.include_router(helper.router)
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, log_level="info")
