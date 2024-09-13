@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,13 +13,26 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 import profileImage from "@/assets/dummy-profile.png";
+import { useFormState } from "react-dom";
+import { useRouter } from "next/navigation";
 
-export default function PamongInputForm() {
+export default function PamongInputForm({
+  pamongAction,
+  defaultValues = null,
+}) {
+  const [state, formAction] = useFormState(pamongAction, defaultValues || {});
+  const router = useRouter();
+
   return (
     <div className="container-fluid">
-      <h1 className="text-2xl font-bold mb-4">Tambah Pamong</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {!defaultValues ? "Tambah Pamong" : "Edit Pamong"}
+      </h1>
 
-      <form encType="multipart/form-data">
+      <form encType="multipart/form-data" action={formAction}>
+        {defaultValues && (
+          <input type="hidden" name="id" defaultValue={defaultValues.id} />
+        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="col-span-1">
             <CardHeader>Foto Profile</CardHeader>
@@ -33,7 +48,7 @@ export default function PamongInputForm() {
                 <div className="text-sm text-gray-500 mb-4">
                   JPG atau PNG max. 5 MB
                 </div>
-                <Input type="file" accept="image/*" />
+                <Input type="file" accept="image/*" name="image" />
               </div>
             </CardContent>
           </Card>
@@ -45,11 +60,23 @@ export default function PamongInputForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="space-y-2">
                   <Label htmlFor="nama">Nama</Label>
-                  <Input id="nama" placeholder="Nama" name="nama" required />
+                  <Input
+                    id="nama"
+                    placeholder="Nama"
+                    name="nama"
+                    defaultValue={defaultValues?.nama}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="nik">NIK</Label>
-                  <Input id="nik" placeholder="NIK" name="nik" required />
+                  <Input
+                    id="nik"
+                    placeholder="NIK"
+                    name="nik"
+                    defaultValue={defaultValues?.nik}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="tempat_lahir">Tempat Lahir</Label>
@@ -57,6 +84,7 @@ export default function PamongInputForm() {
                     id="tempat_lahir"
                     placeholder="Tempat Lahir"
                     name="tempat_lahir"
+                    defaultValue={defaultValues?.tempat_lahir}
                     required
                   />
                 </div>
@@ -66,6 +94,7 @@ export default function PamongInputForm() {
                     id="tanggal_lahir"
                     type="date"
                     name="tanggal_lahir"
+                    defaultValue={defaultValues?.tanggal_lahir}
                     required
                   />
                 </div>
@@ -75,12 +104,17 @@ export default function PamongInputForm() {
                     id="alamat"
                     placeholder="Alamat"
                     name="alamat"
+                    defaultValue={defaultValues?.alamat}
                     required
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="status_kawin">Status Perkawinan</Label>
-                  <Select name="status_kawin" required>
+                  <Select
+                    name="status_kawin"
+                    defaultValue={defaultValues?.status_kawin}
+                    required
+                  >
                     <SelectTrigger id="status_kawin">
                       <SelectValue placeholder="Pilih status" />
                     </SelectTrigger>
@@ -98,12 +132,17 @@ export default function PamongInputForm() {
                     id="pekerjaan"
                     placeholder="Pekerjaan"
                     name="pekerjaan"
+                    defaultValue={defaultValues?.pekerjaan}
                     required
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="gol_darah">Golongan Darah</Label>
-                  <Select name="gol_darah" required>
+                  <Select
+                    name="gol_darah"
+                    defaultValue={defaultValues?.gol_darah}
+                    required
+                  >
                     <SelectTrigger id="gol_darah">
                       <SelectValue placeholder="Pilih golongan darah" />
                     </SelectTrigger>
@@ -117,7 +156,11 @@ export default function PamongInputForm() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="jenis_kelamin">Jenis Kelamin</Label>
-                  <Select name="jenis_kelamin" required>
+                  <Select
+                    name="jenis_kelamin"
+                    defaultValue={defaultValues?.jenis_kelamin}
+                    required
+                  >
                     <SelectTrigger id="jenis_kelamin">
                       <SelectValue placeholder="Pilih jenis kelamin" />
                     </SelectTrigger>
@@ -129,7 +172,11 @@ export default function PamongInputForm() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="agama">Agama</Label>
-                  <Select name="agama" required>
+                  <Select
+                    name="agama"
+                    defaultValue={defaultValues?.agama}
+                    required
+                  >
                     <SelectTrigger id="agama">
                       <SelectValue placeholder="Pilih agama" />
                     </SelectTrigger>
@@ -149,7 +196,13 @@ export default function PamongInputForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="space-y-2">
                   <Label htmlFor="nip">NIP</Label>
-                  <Input id="nip" placeholder="NIP" name="nip" required />
+                  <Input
+                    id="nip"
+                    placeholder="NIP"
+                    name="nip"
+                    defaultValue={defaultValues?.nip}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="jabatan">Jabatan</Label>
@@ -157,6 +210,7 @@ export default function PamongInputForm() {
                     id="jabatan"
                     placeholder="Jabatan"
                     name="jabatan"
+                    defaultValue={defaultValues?.jabatan}
                     required
                   />
                 </div>
@@ -167,6 +221,7 @@ export default function PamongInputForm() {
                     type="number"
                     placeholder="Masa Jabatan Mulai"
                     name="masa_jabatan_mulai"
+                    defaultValue={defaultValues?.masa_jabatan_mulai}
                     required
                   />
                 </div>
@@ -179,6 +234,7 @@ export default function PamongInputForm() {
                     type="number"
                     placeholder="Masa Jabatan Selesai"
                     name="masa_jabatan_selesai"
+                    defaultValue={defaultValues?.masa_jabatan_selesai}
                     required
                   />
                 </div>
@@ -190,12 +246,25 @@ export default function PamongInputForm() {
                     id="pendidikan_terakhir"
                     placeholder="Pendidikan Terakhir"
                     name="pendidikan_terakhir"
+                    defaultValue={defaultValues?.pendidikan_terakhir}
                     required
                   />
                 </div>
               </div>
-
-              <Button type="submit">Tambah Pamong</Button>
+              <div className="flex space-x-2">
+                {defaultValues ? (
+                  <Button type="submit">Simpan</Button>
+                ) : (
+                  <Button type="submit">Tambah Pamong</Button>
+                )}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.back()}
+                >
+                  Batal
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
