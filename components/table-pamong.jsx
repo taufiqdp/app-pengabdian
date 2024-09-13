@@ -22,10 +22,6 @@ export default function TabelPamong({ dataPamong }) {
   const currentPamong = dataPamong.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(dataPamong.length / itemsPerPage);
 
-  const handleDelete = (id) => {
-    console.log("Delete pamong with id", id);
-  };
-
   return (
     <>
       <Table>
@@ -37,7 +33,6 @@ export default function TabelPamong({ dataPamong }) {
             <TableHead className="w-2/12">Pekerjaan</TableHead>
             <TableHead className="w-2/12">Jabatan</TableHead>
             <TableHead className="w-2/12">Masa Jabatan</TableHead>
-            <TableHead className="w-1/12">{""}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -52,14 +47,6 @@ export default function TabelPamong({ dataPamong }) {
               <TableCell>{pamong.jabatan}</TableCell>
               <TableCell>
                 {pamong.masa_jabatan_mulai}-{pamong.masa_jabatan_selesai}
-              </TableCell>
-              <TableCell>
-                <Button
-                  onClick={() => handleDelete(pamong.id)}
-                  className="text-red-500 hover:text-red-700 bg-white"
-                >
-                  Delete
-                </Button>
               </TableCell>
             </TableRow>
           ))}

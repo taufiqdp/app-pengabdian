@@ -1,5 +1,5 @@
-import InputPamong from "@/components/input-pamong";
+import PamongInputForm from "@/components/pamong-input-form";
 
 export default function TambahPamongPage() {
-  return <InputPamong />;
+  return <PamongInputForm />;
 }

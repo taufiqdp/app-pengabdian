@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function TabelUser({ dataUser }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,7 +37,14 @@ export default function TabelUser({ dataUser }) {
           {currentUsers.map((user) => (
             <TableRow key={user.id}>
               <TableCell>{user.id}</TableCell>
-              <TableCell>{user.nama_pamong}</TableCell>
+              <TableCell>
+                <Link
+                  href={`/pamong/${user.id_pamong}`}
+                  className="hover:underline"
+                >
+                  {user.nama_pamong}
+                </Link>
+              </TableCell>
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.email}</TableCell>
             </TableRow>

@@ -7,12 +7,12 @@ import TableKegiatan from "./table-kegiatan";
 export default function ListKegiatan() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [kegiatanData, setKegiatanData] = useState([]);
+  const [dataKegiatan, setDataKegiatan] = useState([]);
 
   useEffect(() => {
     const fetchInitialData = async () => {
       const data = await getKegiatanThisMonth();
-      setKegiatanData(data.kegiatan);
+      setDataKegiatan(data.kegiatan);
       setStartDate(data.startDate);
       setEndDate(data.endDate);
     };
@@ -22,7 +22,7 @@ export default function ListKegiatan() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = await getKegiatanByDate(startDate, endDate);
-    setKegiatanData(data.kegiatan);
+    setDataKegiatan(data.kegiatan);
   };
 
   return (
@@ -74,10 +74,10 @@ export default function ListKegiatan() {
       </form>
 
       <div className="overflow-x-auto">
-        {!kegiatanData ? (
+        {!dataKegiatan ? (
           <div>Data Kosong</div>
         ) : (
-          <TableKegiatan kegiatan={kegiatanData} />
+          <TableKegiatan dataKegiatan={dataKegiatan} />
         )}
       </div>
     </>

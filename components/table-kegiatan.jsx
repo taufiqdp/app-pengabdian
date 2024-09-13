@@ -11,15 +11,19 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
-export default function TableKegiatan({ kegiatan }) {
+export default function TableKegiatan({ dataKegiatan }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentActivities = kegiatan.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(kegiatan.length / itemsPerPage);
+  const currentActivities = dataKegiatan.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  const totalPages = Math.ceil(dataKegiatan.length / itemsPerPage);
   return (
     <>
       <Table>
@@ -32,12 +36,26 @@ export default function TableKegiatan({ kegiatan }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentActivities.map((activity, index) => (
+          {currentActivities.map((kegiatan, index) => (
             <TableRow key={index}>
-              <TableCell>{activity.tanggal}</TableCell>
-              <TableCell>{activity.nama_kegiatan}</TableCell>
-              <TableCell>{activity.tempat}</TableCell>
-              <TableCell>{activity.nama_pamong}</TableCell>
+              <TableCell>{kegiatan.tanggal}</TableCell>
+              <TableCell>
+                <Link
+                  href={`/kegiatan/${kegiatan.id}`}
+                  className="hover:underline"
+                >
+                  {kegiatan.nama_kegiatan}
+                </Link>
+              </TableCell>
+              <TableCell>{kegiatan.tempat}</TableCell>
+              <TableCell>
+                <Link
+                  href={`/pamong/${kegiatan.pamong_id}`}
+                  className="hover:underline"
+                >
+                  {kegiatan.nama_pamong}
+                </Link>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -46,8 +64,8 @@ export default function TableKegiatan({ kegiatan }) {
       <div className="flex justify-between items-center">
         <div className="text-gray-700 font-light">
           Menampilkan {indexOfFirstItem + 1} sampai{" "}
-          {Math.min(indexOfLastItem, kegiatan.length)} dari {kegiatan.length}{" "}
-          kegiatan hari ini
+          {Math.min(indexOfLastItem, dataKegiatan.length)} dari{" "}
+          {dataKegiatan.length} kegiatan
         </div>
         <div className="flex items-center justify-end space-x-2 min-w-36">
           <Button

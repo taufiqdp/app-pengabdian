@@ -27,7 +27,7 @@ export async function Dashboard() {
           </Link>
         </div>
         {data.kegiatan ? (
-          <TableKegiatan kegiatan={data.kegiatan} />
+          <TableKegiatan dataKegiatan={data.kegiatan} />
         ) : (
           <div>Data Kosong</div>
         )}
