@@ -21,8 +21,7 @@ export async function KegiatanDetailComponent({ idKegiatan }) {
         <Image
           src={imageKegiatan}
           alt={dataKegiatan.nama_kegiatan}
-          layout="fill"
-          objectFit="cover"
+          fill
           priority
           className="rounded-t-md"
         />

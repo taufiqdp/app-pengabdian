@@ -1,48 +1,17 @@
-const formData = new FormData();
+import { jwtVerify } from "jose";
 
-// Create the JSON object for pamong
-const pamongData = {
-  jenis_kelamin: "P",
-  gol_darah: "B",
-  tempat_lahir: "aaaaa",
-  pekerjaan: "aaaaaaa",
-  nama: "aaaaaaa",
-  tanggal_lahir: "2024-09-04",
-  alamat: "aaa",
-  jabatan: "aaaa",
-  agama: "Katolik",
-  nik: "2342342323423442",
-  pendidikan_terakhir: "sq",
-  nip: "234234657567234",
-  status_kawin: "Cerai Mati",
-  masa_jabatan_mulai: 3123,
-  masa_jabatan_selesai: 2312,
-};
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlkIjoxMSwiaXNfYWRtaW4iOnRydWUsImV4cCI6MTcyNjg5NTgyMn0.jdlVhEIrz-mGzTx8KofURAmID_i6QiTvirf_iduPdcc";
+console.log(token);
 
-// Append the pamong data as a stringified JSON object
-formData.append("pamong", JSON.stringify(pamongData));
+try {
+  const secret = new TextEncoder().encode(process.env.SECRET_KEY);
+  const { payload } = await jwtVerify(token, secret);
 
-// If you have a file to upload, append it here
-// formData.append("file", fileInput.files[0]);
-
-// Make the POST request using fetch
-fetch("http://127.0.0.1:8000/pamong/", {
-  method: "POST",
-  headers: {
-    // 'accept': 'application/json' is automatically added by fetch for multipart/form-data
-    // No need to explicitly set it
-  },
-  body: formData,
-})
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json(); // Parse the JSON response if needed
-  })
-  .then((data) => {
-    console.log("Success:", data);
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  if (payload.exp && payload.exp < currentTimestamp) {
+    console.error("Token has expired");
+  }
+} catch (error) {
+  console.error("Token verification failed:", error);
+}
