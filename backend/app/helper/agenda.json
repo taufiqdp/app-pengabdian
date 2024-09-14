@@ -2,7 +2,7 @@
   {
     "nama_agenda": "Workshop Pemrograman Python",
     "tanggal_mulai": "2024-01-15T09:00:00",
-    "tanggal_selesai": "2024-01-17T17:00:00",
+    "tanggal_selesai": "2024-01-15T17:00:00",
     "tempat": "Jakarta",
     "deskripsi": "Workshop intensif untuk mempelajari bahasa pemrograman Python."
   },
@@ -16,21 +16,21 @@
   {
     "nama_agenda": "Pelatihan Digital Marketing",
     "tanggal_mulai": "2024-03-10T09:30:00",
-    "tanggal_selesai": "2024-03-12T17:30:00",
+    "tanggal_selesai": "2024-03-10T17:30:00",
     "tempat": "Surabaya",
     "deskripsi": "Pelatihan untuk mempelajari strategi dan teknik digital marketing."
   },
   {
     "nama_agenda": "Seminar Kewirausahaan",
     "tanggal_mulai": "2024-04-05T10:00:00",
-    "tanggal_selesai": "2024-04-06T15:00:00",
+    "tanggal_selesai": "2024-04-05T15:00:00",
     "tempat": "Yogyakarta",
     "deskripsi": "Seminar yang membahas tentang kiat-kiat sukses dalam berwirausaha."
   },
   {
     "nama_agenda": "Pameran Seni Rupa",
     "tanggal_mulai": "2024-05-18T11:00:00",
-    "tanggal_selesai": "2024-05-25T18:00:00",
+    "tanggal_selesai": "2024-05-18T18:00:00",
     "tempat": "Denpasar",
     "deskripsi": "Pameran yang menampilkan karya seni rupa dari berbagai seniman."
   },
@@ -44,14 +44,14 @@
   {
     "nama_agenda": "Kompetisi Olahraga",
     "tanggal_mulai": "2024-07-20T07:00:00",
-    "tanggal_selesai": "2024-07-22T16:00:00",
+    "tanggal_selesai": "2024-07-20T16:00:00",
     "tempat": "Semarang",
     "deskripsi": "Kompetisi olahraga tingkat nasional."
   },
   {
     "nama_agenda": "Lomba Fotografi",
     "tanggal_mulai": "2024-08-12T00:00:00",
-    "tanggal_selesai": "2024-08-31T23:59:59",
+    "tanggal_selesai": "2024-08-12T23:59:59",
     "tempat": "Medan",
     "deskripsi": "Lomba fotografi dengan tema alam Indonesia."
   },

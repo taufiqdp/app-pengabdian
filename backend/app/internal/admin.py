@@ -13,10 +13,18 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.get("/users")
 async def get_users(db: db_dependency, admin: admin_dependency):
-
     users = db.query(User).filter(User.is_admin == False).all()
-
-    return users
+    users_with_pamong = [
+        {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "nama_pamong": user.pamong.nama if user.pamong else None,
+            "id_pamong": user.pamong.id if user.pamong else None,
+        }
+        for user in users
+    ]
+    return users_with_pamong
 
 
 @router.get("/users/{user_id}")
@@ -28,12 +36,18 @@ async def get_user_by_id(user_id: int, db: db_dependency, admin: admin_dependenc
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
 
-    return user
+    user_data = {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "nama_pamong": user.pamong.nama if user.pamong else None
+    }
+    
+    return user_data
 
 
 @router.delete("/users/{user_id}")
 async def delete_user(user_id: int, db: db_dependency, admin: admin_dependency):
-
     user = (
         db.query(User)
         .filter((User.id == user_id))
@@ -123,7 +137,7 @@ async def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependen
 
 
 @router.get("/pamong/{pamong_id}/image")
-async def get_pamong_image(pamong_id: int, db: db_dependency):
+async def get_pamong_image(pamong_id: int, db: db_dependency, admin: admin_dependency):
     pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
 
     if not pamong:
@@ -139,9 +153,8 @@ async def get_pamong_image(pamong_id: int, db: db_dependency):
         )
 
 
-# Get all kegiatan by date
 @router.get("/kegiatan")
-async def get_kegiatan(db: db_dependency, start_date: date, end_date: date):
+async def get_kegiatan(db: db_dependency, start_date: date, end_date: date, admin: admin_dependency):
     kegiatan_all = (
         db.query(Kegiatan)
         .filter(Kegiatan.tanggal >= start_date)
@@ -150,7 +163,9 @@ async def get_kegiatan(db: db_dependency, start_date: date, end_date: date):
     )
 
     if not kegiatan_all:
-        return {"detail": "No kegiatan found"}
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Kegiatan not found"
+        )
 
     kegiatan_dict = [
         {
@@ -190,6 +205,36 @@ async def get_kegiatan_by_id(
         "gambar": kegiatan.gambar,
         "user_id": kegiatan.user_id,
         "nama_pamong": kegiatan.user.pamong.nama,
+        "pamong_id": kegiatan.user.pamong.id,
     }
 
     return kegiatan
+
+
+@router.get("/pamong/{pamong_id}/kegiatan")
+async def get_kegiatan_by_pamong_id(
+    pamong_id: int, db: db_dependency, admin: admin_dependency
+):
+    kegiatan_all = db.query(Kegiatan).filter(Kegiatan.user.has(pamong_id=pamong_id)).all()
+
+    if not kegiatan_all:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Kegiatan not found"
+        )
+
+    kegiatan_dict = [
+        {
+            "id": kegiatan.id,
+            "nama_kegiatan": kegiatan.nama_kegiatan,
+            "tanggal": kegiatan.tanggal,
+            "tempat": kegiatan.tempat,
+            "deskripsi": kegiatan.deskripsi,
+            "gambar": kegiatan.gambar,
+            "user_id": kegiatan.user_id,
+            "nama_pamong": kegiatan.user.pamong.nama,
+            "pamong_id": kegiatan.user.pamong.id,
+        }
+        for kegiatan in kegiatan_all
+    ]
+
+    return kegiatan_dict
