@@ -60,7 +60,7 @@ export default function MainSidebar({ children }) {
       <TopNavbar toggleSidebar={toggleSidebar} />
 
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white p-5 transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed flex flex-col top-0 left-0 h-full w-64 bg-gray-800 text-white p-5 transform transition-transform duration-300 ease-in-out z-50 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 overflow-y-auto`}
       >
@@ -71,7 +71,10 @@ export default function MainSidebar({ children }) {
           <X size={24} />
         </button>
 
-        <nav className="mt-10">
+        <div className="flex flex-row items-center gap-2">
+          <h1 className="text-2xl uppercase">Semanu</h1>
+        </div>
+        <nav className="pt-10">
           <ul className="space-y-2">
             {menuItems.map((item, index) => (
               <li key={index}>
@@ -121,6 +124,7 @@ export default function MainSidebar({ children }) {
             ))}
           </ul>
         </nav>
+        <div className="mt-auto"> Test</div>
       </div>
 
       <main className="md:ml-64 p-6">{children}</main>

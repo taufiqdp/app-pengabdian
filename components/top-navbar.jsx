@@ -1,8 +1,18 @@
+"use client";
+
 import { Menu } from "lucide-react";
 import dummyProfile from "@/assets/dummy-profile.png";
 import Image from "next/image";
+import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import LogoutDropDown from "./logout-dropdown";
 
 export default function TopNavbar({ toggleSidebar }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,11 +26,18 @@ export default function TopNavbar({ toggleSidebar }) {
             </button>
           </div>
           <div className="flex items-center">
-            <Image
-              className="h-8 w-8 rounded-full"
-              src={dummyProfile}
-              alt="Profile"
-            />
+            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+              <DropdownMenuTrigger asChild>
+                <button className="focus:outline-none">
+                  <Image
+                    className="h-8 w-8 rounded-full"
+                    src={dummyProfile}
+                    alt="Profile"
+                  />
+                </button>
+              </DropdownMenuTrigger>
+              <LogoutDropDown />
+            </DropdownMenu>
           </div>
         </div>
       </div>
