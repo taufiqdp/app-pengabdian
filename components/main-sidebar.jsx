@@ -74,7 +74,9 @@ export default function MainSidebar({ children }) {
         <div className="flex flex-row items-center gap-2">
           <h1 className="text-2xl uppercase">Semanu</h1>
         </div>
-        <nav className="pt-10">
+        <nav>
+          <hr className="border-t border-gray-700 my-5" />
+
           <ul className="space-y-2">
             {menuItems.map((item, index) => (
               <li key={index}>
@@ -124,7 +126,9 @@ export default function MainSidebar({ children }) {
             ))}
           </ul>
         </nav>
-        <div className="mt-auto"> Test</div>
+        <div className="mt-auto">
+          <hr className="border-t border-gray-700 my-5" />
+        </div>
       </div>
 
       <main className="md:ml-64 p-6">{children}</main>
