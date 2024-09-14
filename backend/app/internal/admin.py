@@ -40,9 +40,9 @@ async def get_user_by_id(user_id: int, db: db_dependency, admin: admin_dependenc
         "id": user.id,
         "username": user.username,
         "email": user.email,
-        "nama_pamong": user.pamong.nama if user.pamong else None
+        "nama_pamong": user.pamong.nama if user.pamong else None,
     }
-    
+
     return user_data
 
 
@@ -154,7 +154,9 @@ async def get_pamong_image(pamong_id: int, db: db_dependency, admin: admin_depen
 
 
 @router.get("/kegiatan")
-async def get_kegiatan(db: db_dependency, start_date: date, end_date: date, admin: admin_dependency):
+async def get_kegiatan(
+    db: db_dependency, start_date: date, end_date: date, admin: admin_dependency
+):
     kegiatan_all = (
         db.query(Kegiatan)
         .filter(Kegiatan.tanggal >= start_date)
@@ -215,7 +217,9 @@ async def get_kegiatan_by_id(
 async def get_kegiatan_by_pamong_id(
     pamong_id: int, db: db_dependency, admin: admin_dependency
 ):
-    kegiatan_all = db.query(Kegiatan).filter(Kegiatan.user.has(pamong_id=pamong_id)).all()
+    kegiatan_all = (
+        db.query(Kegiatan).filter(Kegiatan.user.has(pamong_id=pamong_id)).all()
+    )
 
     if not kegiatan_all:
         raise HTTPException(
