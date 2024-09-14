@@ -44,7 +44,7 @@ export default function ListKegiatan() {
             name="start"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-lblue focus:border-lbring-lblue"
           />
         </div>
         <div className="flex flex-col flex-1">
@@ -66,7 +66,7 @@ export default function ListKegiatan() {
         <div className="flex items-end bottom-0">
           <button
             type="submit"
-            className="bg-gray-800 text-white px-2 py-2 h-11 w-16 rounded-md hover:bg-gray-700"
+            className="bg-lblue text-white px-2 py-2 h-11 w-16 rounded-md hover:bg-blue-500"
           >
             Filter
           </button>

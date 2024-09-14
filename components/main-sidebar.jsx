@@ -60,7 +60,7 @@ export default function MainSidebar({ children }) {
       <TopNavbar toggleSidebar={toggleSidebar} />
 
       <div
-        className={`fixed flex flex-col top-0 left-0 h-full w-64 bg-gray-800 text-white p-5 transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed flex flex-col top-0 left-0 h-full w-64 bg-lblue text-white p-5 transform transition-transform duration-300 ease-in-out z-50 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 overflow-y-auto`}
       >
@@ -75,7 +75,7 @@ export default function MainSidebar({ children }) {
           <h1 className="text-2xl uppercase">Semanu</h1>
         </div>
         <nav>
-          <hr className="border-t border-gray-700 my-5" />
+          <hr className="border-t border-blue-100 my-5" />
 
           <ul className="space-y-2">
             {menuItems.map((item, index) => (
@@ -83,7 +83,7 @@ export default function MainSidebar({ children }) {
                 {item.subItems ? (
                   <button
                     onClick={() => toggleSubmenu(index)}
-                    className="flex items-center justify-between w-full p-2 rounded hover:bg-gray-700 transition-colors duration-200"
+                    className="flex items-center justify-between w-full p-2 rounded text-gray-200 hover:text-white transition-colors duration-200"
                   >
                     <div className="flex items-center space-x-2">
                       <item.icon size={20} />
@@ -98,23 +98,23 @@ export default function MainSidebar({ children }) {
                 ) : (
                   <Link
                     href={item.link}
-                    className="flex items-center w-full p-2 rounded hover:bg-gray-700 transition-colors duration-200"
+                    className="flex items-center w-full py-2 rounded"
                   >
-                    <div className="flex items-center space-x-2">
-                      <item.icon size={20} />
+                    <div className="flex items-center font-semibold text-lg space-x-2 pb-2">
+                      {/* <item.icon size={20} /> */}
                       <span>{item.text}</span>
                     </div>
                   </Link>
                 )}
                 {openSubmenu === index && (
-                  <ul className="ml-6 mt-2 space-y-2">
+                  <ul className="px-2 py-2 mt-2 rounded-lg space-y-2 bg-neutral-100 text-gray-900 text-sm">
                     {item.subItems.map((subItem, subIndex) => (
                       <li key={subIndex}>
                         <Link
                           href={`${item.link}/${subItem
                             .toLowerCase()
                             .replace(" ", "-")}`}
-                          className="block p-2 rounded hover:bg-gray-700 transition-colors duration-200"
+                          className="block py-2 px-4 rounded hover:bg-neutral-300 transition-colors duration-200"
                         >
                           {subItem}
                         </Link>
@@ -127,11 +127,11 @@ export default function MainSidebar({ children }) {
           </ul>
         </nav>
         <div className="mt-auto">
-          <hr className="border-t border-gray-700 my-5" />
+          <hr className="border-t border-blue-100 my-5" />
         </div>
       </div>
 
-      <main className="md:ml-64 p-6">{children}</main>
+      <main className="flex flex-col md:ml-64 p-6 flex: 1;">{children}</main>
     </div>
   );
 }

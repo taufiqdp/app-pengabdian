@@ -16,10 +16,10 @@ export async function Dashboard() {
 
       <div className="space-y-6 shadow-md bg-white p-4 rounded-lg">
         <div className="flex justify-between">
-          <Input placeholder="Cari kegiatan..." className="max-w-sm" />
+          <Input placeholder="Cari kegiatan..." className="sm:max-w-sm w-64" />
           <Link
             href="#"
-            className="flex gap-2 items-center border px-2 rounded-lg shadow-sm hover:bg-gray-800 hover:text-white"
+            className="flex gap-2 items-center border px-2 rounded-lg shadow-sm hover:bg-lblue hover:text-white"
           >
             <DownloadIcon size={18} />
 

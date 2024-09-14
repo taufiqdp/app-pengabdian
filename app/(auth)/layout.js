@@ -8,7 +8,7 @@ const geistSans = localFont({
 });
 
 export const metadata = {
-  title: "Desa Semanu",
+  title: "Login",
   description: "Desa Semanu",
 };
 

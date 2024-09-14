@@ -251,12 +251,7 @@ export default function PamongInputForm({
                   />
                 </div>
               </div>
-              <div className="flex space-x-2">
-                {defaultValues ? (
-                  <Button type="submit">Simpan</Button>
-                ) : (
-                  <Button type="submit">Tambah Pamong</Button>
-                )}
+              <div className="flex space-x-2 justify-end">
                 <Button
                   type="button"
                   variant="outline"
@@ -264,6 +259,21 @@ export default function PamongInputForm({
                 >
                   Batal
                 </Button>
+                {defaultValues ? (
+                  <Button
+                    type="submit"
+                    className="bg-lblue text-white hover:bg-blue-500"
+                  >
+                    Simpan
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="bg-lblue text-white hover:bg-blue-500"
+                  >
+                    Tambah Pamong
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>

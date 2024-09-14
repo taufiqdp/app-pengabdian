@@ -11,11 +11,11 @@ import {
   DropletIcon,
   UserIcon,
   PencilIcon,
-  TrashIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import TableKegiatan from "./table-kegiatan";
+import DeleteDialog from "./delete-dialog";
 
 export async function PamongDetail({ idPamong }) {
   const dataPamong = (await getPamongById(idPamong)).pamong;
@@ -35,10 +35,8 @@ export async function PamongDetail({ idPamong }) {
               Edit
             </Button>
           </Link>
-          <Button variant="destructive">
-            <TrashIcon className="w-4 h-4 mr-2" />
-            Hapus
-          </Button>
+
+          <DeleteDialog idPamong={idPamong} />
         </div>
       </div>
       <div className="bg-card rounded-lg shadow-md p-6">

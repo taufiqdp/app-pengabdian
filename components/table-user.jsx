@@ -61,6 +61,7 @@ export default function TabelUser({ dataUser }) {
           <Button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
+            className="bg-lblue text-white hover:bg-blue-500"
           >
             <ArrowLeft />
           </Button>
@@ -69,6 +70,7 @@ export default function TabelUser({ dataUser }) {
               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
             }
             disabled={currentPage === totalPages}
+            className="bg-lblue text-white hover:bg-blue-500"
           >
             <ArrowRight />
           </Button>
