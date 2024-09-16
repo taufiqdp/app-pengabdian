@@ -3,12 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-function getUTC7Date(date = new Date()) {
-  return new Date(date.getTime() + 7 * 60 * 60 * 1000);
-}
-
 function formatDate(date) {
-  return date.toISOString().split("T")[0];
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+    .toISOString()
+    .split("T")[0];
 }
 
 function getAccessToken() {
@@ -17,7 +15,7 @@ function getAccessToken() {
 }
 
 export async function getKegiatanByDate(startDate, endDate) {
-  const utc7Now = getUTC7Date();
+  const utc7Now = new Date();
   const today = formatDate(utc7Now);
 
   startDate = startDate || today;
@@ -49,7 +47,7 @@ export async function getKegiatanByDate(startDate, endDate) {
 }
 
 export async function getKegiatanToday() {
-  const utc7Now = getUTC7Date();
+  const utc7Now = new Date();
   const today = formatDate(utc7Now);
 
   const bearer = getAccessToken();
@@ -79,13 +77,9 @@ export async function getKegiatanToday() {
 }
 
 export async function getKegiatanThisMonth() {
-  const utc7Now = getUTC7Date();
-  const firstDay = new Date(utc7Now.getFullYear(), utc7Now.getMonth(), 1 + 1);
-  const lastDay = new Date(
-    utc7Now.getFullYear(),
-    utc7Now.getMonth() + 1,
-    0 + 1
-  );
+  const utc7Now = new Date();
+  const firstDay = new Date(utc7Now.getFullYear(), utc7Now.getMonth(), 1);
+  const lastDay = new Date(utc7Now.getFullYear(), utc7Now.getMonth() + 1, 0);
 
   const formattedStartDate = formatDate(firstDay);
   const formattedEndDate = formatDate(lastDay);

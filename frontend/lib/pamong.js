@@ -17,6 +17,7 @@ export async function getAllPamong() {
         Authorization: `Bearer ${bearer}`,
       },
     });
+    
     if (!response.ok) {
       return {
         error: `Network response was not ok: ${response.status} ${response.statusText}`,

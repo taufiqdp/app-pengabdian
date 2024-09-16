@@ -2,10 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { verifyToken } from "./auth";
+
+function getAccessToken() {
+  const token = cookies().get("access_token").value;
+  return token;
+}
 
 export default async function getAllUser() {
-  const bearer = await verifyToken();
+  const bearer = getAccessToken();
 
   try {
     const response = await fetch(`${process.env.BASE_API_URL}admin/users`, {
