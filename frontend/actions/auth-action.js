@@ -39,6 +39,7 @@ export async function loginAction(prevState, formData) {
   });
 
   return {
+    ...prevState,
     success: true,
   };
 }
