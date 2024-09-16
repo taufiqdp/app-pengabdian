@@ -15,6 +15,7 @@ import Image from "next/image";
 import profileImage from "@/assets/dummy-profile.png";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
+import FormButton from "./form-button";
 
 export default function PamongInputForm({
   pamongAction,
@@ -29,12 +30,12 @@ export default function PamongInputForm({
         {!defaultValues ? "Tambah Pamong" : "Edit Pamong"}
       </h1>
 
-      <form encType="multipart/form-data" action={formAction}>
+      <form action={formAction}>
         {defaultValues && (
           <input type="hidden" name="id" defaultValue={defaultValues.id} />
         )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="col-span-1">
+          <Card className="col-span-1 shadow-md">
             <CardHeader>Foto Profile</CardHeader>
             <CardContent>
               <div className="text-center">
@@ -53,7 +54,7 @@ export default function PamongInputForm({
             </CardContent>
           </Card>
 
-          <Card className="col-span-1 md:col-span-2">
+          <Card className="col-span-1 md:col-span-2 shadow-md">
             <CardHeader>Pamong Detail</CardHeader>
             <CardContent>
               <h4 className="text-lg font-semibold mb-2">Data Diri</h4>
@@ -260,19 +261,9 @@ export default function PamongInputForm({
                   Batal
                 </Button>
                 {defaultValues ? (
-                  <Button
-                    type="submit"
-                    className="bg-lblue text-white hover:bg-blue-500"
-                  >
-                    Simpan
-                  </Button>
+                  <FormButton title="Simpan Perubahan" />
                 ) : (
-                  <Button
-                    type="submit"
-                    className="bg-lblue text-white hover:bg-blue-500"
-                  >
-                    Tambah Pamong
-                  </Button>
+                  <FormButton title="Simpan" />
                 )}
               </div>
             </CardContent>

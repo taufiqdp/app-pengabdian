@@ -72,7 +72,7 @@ export default function MainSidebar({ children }) {
         </button>
 
         <div className="flex flex-row items-center gap-2">
-          <h1 className="text-2xl uppercase">Semanu</h1>
+          <h1 className="text-2xl uppercase"> </h1>
         </div>
         <nav>
           <hr className="border-t border-blue-100 my-5" />

@@ -10,8 +10,6 @@ import { redirect } from "next/navigation";
 const DAYS = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
 export function BigCalendar({ agendaAction, agendaData }) {
-  console.log(agendaData);
-
   const [state, formAction] = useFormState(agendaAction, {});
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
