@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import AgendaInputDialog from "./agenda-input-dialog";
 import { useFormState } from "react-dom";
 import { redirect } from "next/navigation";
+import { AgendaDetailDialog } from "./agenda-detail-dialog";
 
 const DAYS = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
@@ -14,6 +15,9 @@ export function BigCalendar({ agendaAction, agendaData }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({});
+  const [isAgendaOpen, setIsAgendaOpen] = useState(false);
+  const [clickedAgendaData, setClickedAgendaData] = useState({});
+
   // const [selectedDate, setSelectedDate] = useState(null);
 
   const getDaysInMonth = (date) => {
@@ -22,6 +26,13 @@ export function BigCalendar({ agendaAction, agendaData }) {
     const days = new Array(35).fill(null);
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
+
+    useEffect(() => {
+      if (state?.closeModal) {
+        setIsModalOpen(false);
+        redirect("/agenda/kalender");
+      }
+    }, [state]);
 
     for (let i = 0; i < lastDate; i++) {
       days[firstDay + i] = new Date(year, month, i + 1);
@@ -56,18 +67,16 @@ export function BigCalendar({ agendaAction, agendaData }) {
     );
   };
 
-  useEffect(() => {
-    if (state?.closeModal) {
-      setIsModalOpen(false);
-      redirect("/agenda/kalender");
-    }
-  }, [state]);
-
   const handleDateClick = (date) => {
     if (date) {
       setNewEvent({ start: date, end: date });
       setIsModalOpen(true);
     }
+  };
+
+  const handleEventClick = (event) => {
+    setIsAgendaOpen(true);
+    setClickedAgendaData(event);
   };
 
   const getEventsForDate = (date) => {
@@ -154,18 +163,24 @@ export function BigCalendar({ agendaAction, agendaData }) {
                       new Date(event.tanggal_selesai).toDateString() !==
                         new Date().toDateString();
                     return (
-                      <div
+                      <div // Add a click handler for event clicks
                         key={eventIndex}
                         className={`text-xs p-1 mb-1 truncate ${
                           status === "middle" || status === "end" ? "pl-4" : ""
                         } ${
-                          isPastEvent ? "bg-blue-300" : "bg-blue-500"
+                          isPastEvent
+                            ? "bg-blue-300 hover:bg-blue-400"
+                            : "bg-blue-500 hover:bg-blue-600"
                         } text-white`}
                         title={`${event.nama_agenda}\nFrom: ${new Date(
                           event.tanggal_mulai
                         ).toLocaleString()}\nTo: ${new Date(
                           event.tanggal_selesai
                         ).toLocaleString()}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEventClick(event);
+                        }}
                       >
                         {status === "single" || status === "start"
                           ? event.nama_agenda
@@ -179,6 +194,13 @@ export function BigCalendar({ agendaAction, agendaData }) {
           </div>
         ))}
       </div>
+
+      {/* Dialog Detail */}
+      <AgendaDetailDialog
+        isAgendaOpen={isAgendaOpen}
+        setIsAgendaOpen={setIsAgendaOpen}
+        agendaData={clickedAgendaData}
+      />
 
       {/* Dialog Input */}
       <AgendaInputDialog

@@ -1,5 +1,3 @@
-"use client";
-
 import { Textarea } from "./ui/textarea";
 import FormButton from "./form-button";
 import { Input } from "@/components/ui/input";
