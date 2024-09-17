@@ -61,3 +61,31 @@ export async function getAgendaThisMonth() {
     return { error: error.message };
   }
 }
+
+export async function deleteAgendaById(idAgenda) {
+  const bearer = getAccessToken();
+
+  try {
+    const response = await fetch(
+      `${process.env.BASE_API_URL}agenda/${idAgenda}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${bearer}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return {
+        error: `Network response was not ok: ${response.status} ${response.statusText}`,
+      };
+    }
+
+    revalidatePath("/agenda", "layout");
+    // console.log(response);
+    return {};
+  } catch (error) {
+    return { error: error.message };
+  }
+}
