@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -58,48 +59,52 @@ export default function PamongInputForm({
             <CardHeader>Pamong Detail</CardHeader>
             <CardContent>
               <h4 className="text-lg font-semibold mb-2">Data Diri</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="space-y-2">
-                  <Label htmlFor="nama">Nama</Label>
-                  <Input
-                    id="nama"
-                    placeholder="Nama"
-                    name="nama"
-                    defaultValue={defaultValues?.nama}
-                    required
-                  />
+              <div className="flex flex-col space-y-4">
+                <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="nama">Nama</Label>
+                    <Input
+                      id="nama"
+                      placeholder="Nama"
+                      name="nama"
+                      defaultValue={defaultValues?.nama}
+                      required
+                    />
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="nik">NIK</Label>
+                    <Input
+                      id="nik"
+                      placeholder="NIK"
+                      name="nik"
+                      defaultValue={defaultValues?.nik}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="tempat_lahir">Tempat Lahir</Label>
+                    <Input
+                      id="tempat_lahir"
+                      placeholder="Tempat Lahir"
+                      name="tempat_lahir"
+                      defaultValue={defaultValues?.tempat_lahir}
+                      required
+                    />
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="tanggal_lahir">Tanggal Lahir</Label>
+                    <Input
+                      id="tanggal_lahir"
+                      type="date"
+                      name="tanggal_lahir"
+                      defaultValue={defaultValues?.tanggal_lahir}
+                      required
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="nik">NIK</Label>
-                  <Input
-                    id="nik"
-                    placeholder="NIK"
-                    name="nik"
-                    defaultValue={defaultValues?.nik}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="tempat_lahir">Tempat Lahir</Label>
-                  <Input
-                    id="tempat_lahir"
-                    placeholder="Tempat Lahir"
-                    name="tempat_lahir"
-                    defaultValue={defaultValues?.tempat_lahir}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="tanggal_lahir">Tanggal Lahir</Label>
-                  <Input
-                    id="tanggal_lahir"
-                    type="date"
-                    name="tanggal_lahir"
-                    defaultValue={defaultValues?.tanggal_lahir}
-                    required
-                  />
-                </div>
-                <div className="space-y-2 col-span-2">
                   <Label htmlFor="alamat">Alamat</Label>
                   <Input
                     id="alamat"
@@ -109,67 +114,71 @@ export default function PamongInputForm({
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="status_kawin">Status Perkawinan</Label>
-                  <Select
-                    name="status_kawin"
-                    defaultValue={defaultValues?.status_kawin}
-                    required
-                  >
-                    <SelectTrigger id="status_kawin">
-                      <SelectValue placeholder="Pilih status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Belum Kawin">Belum Kawin</SelectItem>
-                      <SelectItem value="Kawin">Kawin</SelectItem>
-                      <SelectItem value="Cerai Hidup">Cerai Hidup</SelectItem>
-                      <SelectItem value="Cerai Mati">Cerai Mati</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="status_kawin">Status Perkawinan</Label>
+                    <Select
+                      name="status_kawin"
+                      defaultValue={defaultValues?.status_kawin}
+                      required
+                    >
+                      <SelectTrigger id="status_kawin">
+                        <SelectValue placeholder="Pilih status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Belum Kawin">Belum Kawin</SelectItem>
+                        <SelectItem value="Kawin">Kawin</SelectItem>
+                        <SelectItem value="Cerai Hidup">Cerai Hidup</SelectItem>
+                        <SelectItem value="Cerai Mati">Cerai Mati</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="pekerjaan">Pekerjaan</Label>
+                    <Input
+                      id="pekerjaan"
+                      placeholder="Pekerjaan"
+                      name="pekerjaan"
+                      defaultValue={defaultValues?.pekerjaan}
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="pekerjaan">Pekerjaan</Label>
-                  <Input
-                    id="pekerjaan"
-                    placeholder="Pekerjaan"
-                    name="pekerjaan"
-                    defaultValue={defaultValues?.pekerjaan}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="gol_darah">Golongan Darah</Label>
-                  <Select
-                    name="gol_darah"
-                    defaultValue={defaultValues?.gol_darah}
-                    required
-                  >
-                    <SelectTrigger id="gol_darah">
-                      <SelectValue placeholder="Pilih golongan darah" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="A">A</SelectItem>
-                      <SelectItem value="B">B</SelectItem>
-                      <SelectItem value="AB">AB</SelectItem>
-                      <SelectItem value="O">O</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="jenis_kelamin">Jenis Kelamin</Label>
-                  <Select
-                    name="jenis_kelamin"
-                    defaultValue={defaultValues?.jenis_kelamin}
-                    required
-                  >
-                    <SelectTrigger id="jenis_kelamin">
-                      <SelectValue placeholder="Pilih jenis kelamin" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="L">Laki-laki</SelectItem>
-                      <SelectItem value="P">Perempuan</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="gol_darah">Golongan Darah</Label>
+                    <Select
+                      name="gol_darah"
+                      defaultValue={defaultValues?.gol_darah}
+                      required
+                    >
+                      <SelectTrigger id="gol_darah">
+                        <SelectValue placeholder="Pilih golongan darah" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="A">A</SelectItem>
+                        <SelectItem value="B">B</SelectItem>
+                        <SelectItem value="AB">AB</SelectItem>
+                        <SelectItem value="O">O</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="jenis_kelamin">Jenis Kelamin</Label>
+                    <Select
+                      name="jenis_kelamin"
+                      defaultValue={defaultValues?.jenis_kelamin}
+                      required
+                    >
+                      <SelectTrigger id="jenis_kelamin">
+                        <SelectValue placeholder="Pilih jenis kelamin" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="L">Laki-laki</SelectItem>
+                        <SelectItem value="P">Perempuan</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="agama">Agama</Label>
@@ -193,53 +202,59 @@ export default function PamongInputForm({
                 </div>
               </div>
 
-              <h4 className="text-lg font-semibold mb-2">Data Pegawai</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="space-y-2">
-                  <Label htmlFor="nip">NIP</Label>
-                  <Input
-                    id="nip"
-                    placeholder="NIP"
-                    name="nip"
-                    defaultValue={defaultValues?.nip}
-                    required
-                  />
+              <h4 className="text-lg font-semibold mt-6 mb-2">Data Pegawai</h4>
+              <div className="flex flex-col space-y-4">
+                <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="nip">NIP</Label>
+                    <Input
+                      id="nip"
+                      placeholder="NIP"
+                      name="nip"
+                      defaultValue={defaultValues?.nip}
+                      required
+                    />
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="jabatan">Jabatan</Label>
+                    <Input
+                      id="jabatan"
+                      placeholder="Jabatan"
+                      name="jabatan"
+                      defaultValue={defaultValues?.jabatan}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="masa_jabatan_mulai">
+                      Masa Jabatan Mulai
+                    </Label>
+                    <Input
+                      id="masa_jabatan_mulai"
+                      type="number"
+                      placeholder="Masa Jabatan Mulai"
+                      name="masa_jabatan_mulai"
+                      defaultValue={defaultValues?.masa_jabatan_mulai}
+                      required
+                    />
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="masa_jabatan_selesai">
+                      Masa Jabatan Selesai
+                    </Label>
+                    <Input
+                      id="masa_jabatan_selesai"
+                      type="number"
+                      placeholder="Masa Jabatan Selesai"
+                      name="masa_jabatan_selesai"
+                      defaultValue={defaultValues?.masa_jabatan_selesai}
+                      required
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="jabatan">Jabatan</Label>
-                  <Input
-                    id="jabatan"
-                    placeholder="Jabatan"
-                    name="jabatan"
-                    defaultValue={defaultValues?.jabatan}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="masa_jabatan_mulai">Masa Jabatan Mulai</Label>
-                  <Input
-                    id="masa_jabatan_mulai"
-                    type="number"
-                    placeholder="Masa Jabatan Mulai"
-                    name="masa_jabatan_mulai"
-                    defaultValue={defaultValues?.masa_jabatan_mulai}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="masa_jabatan_selesai">
-                    Masa Jabatan Selesai
-                  </Label>
-                  <Input
-                    id="masa_jabatan_selesai"
-                    type="number"
-                    placeholder="Masa Jabatan Selesai"
-                    name="masa_jabatan_selesai"
-                    defaultValue={defaultValues?.masa_jabatan_selesai}
-                    required
-                  />
-                </div>
-                <div className="space-y-2 col-span-2">
                   <Label htmlFor="pendidikan_terakhir">
                     Pendidikan Terakhir
                   </Label>
@@ -252,7 +267,7 @@ export default function PamongInputForm({
                   />
                 </div>
               </div>
-              <div className="flex space-x-2 justify-end">
+              <div className="flex space-x-2 justify-end mt-6">
                 <Button
                   type="button"
                   variant="outline"
