@@ -27,13 +27,6 @@ export function BigCalendar({ agendaAction, agendaData }) {
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
 
-    useEffect(() => {
-      if (state?.closeModal) {
-        setIsModalOpen(false);
-        redirect("/agenda/kalender");
-      }
-    }, [state]);
-
     for (let i = 0; i < lastDate; i++) {
       days[firstDay + i] = new Date(year, month, i + 1);
     }
@@ -98,6 +91,13 @@ export function BigCalendar({ agendaAction, agendaData }) {
     if (isLastDay) return "end";
     return "middle";
   };
+
+  useEffect(() => {
+    if (state?.closeModal) {
+      setIsModalOpen(false);
+      redirect("/agenda/kalender");
+    }
+  }, [state]);
 
   return (
     <div className="h-screen p-4 bg-background text-foreground">
