@@ -1,25 +1,58 @@
-# Start of Selection
 FROM node:22-alpine3.19 AS deps
+WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+RUN apk add --no-cache libc6-compat
+
+# Copy only the files needed to install dependencies
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+
+# Install dependencies with the preferred package manager
+RUN \
+  if [ -f package-lock.json ]; then npm ci; \
+  elif [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
 
 FROM node:22-alpine3.19 AS builder
+WORKDIR /app
 
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy the rest of the files
 COPY . .
-COPY --from=deps /node_modules ./node_modules
-ENV SECRET_KEY $key
-RUN npm run build
+
+# Run build with the preferred package manager
+RUN \
+  if [ -f yarn.lock ]; then yarn build; \
+  elif [ -f package-lock.json ]; then npm run build; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm build; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
 
 FROM node:22-alpine3.19 AS runner
+WORKDIR /app
 
-COPY --from=builder /.next/standalone ./
-# COPY --from=builder /public ./public
-# COPY --from=builder /.next/static ./static
+ENV NODE_ENV production
+
+# Copy public assets
+# COPY --from=builder /app/public ./public
+
+# Set the correct permission for prerender cache
+# RUN mkdir .next
+# RUN chown nextjs:nodejs .next
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
 
 EXPOSE 3000
 
 ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 
-CMD HOSTNAME='0.0.0.0' node server.js
+CMD ["node", "server.js"]
