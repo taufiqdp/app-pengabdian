@@ -8,6 +8,6 @@ testing:
 	python -m pytest
 
 run:
-	uvicorn main:app
+	python -m uvicorn main:app
 
 all: install format testing run 
