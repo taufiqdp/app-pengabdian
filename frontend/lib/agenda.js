@@ -55,7 +55,7 @@ export async function getAgendaThisMonth() {
     }
 
     const agenda = await response.json();
-    console.log(agenda[0]);
+    // console.log(new Date(agenda[0].tanggal_mulai).getMonth());
     return { agenda };
   } catch (error) {
     return { error: error.message };
