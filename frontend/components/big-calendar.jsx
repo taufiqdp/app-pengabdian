@@ -19,7 +19,7 @@ export function BigCalendar({ agendaAction, agendaData }) {
   const getDaysInMonth = (date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
-    const days = new Array(35).fill(null); // Change to 35 days
+    const days = new Array(35).fill(null);
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
 
@@ -70,11 +70,31 @@ export function BigCalendar({ agendaAction, agendaData }) {
     }
   };
 
+  const getEventsForDate = (date) => {
+    return agendaData.agenda.filter((event) => {
+      const eventStart = new Date(event.tanggal_mulai);
+      const eventEnd = new Date(event.tanggal_selesai);
+      return date >= eventStart && date <= eventEnd;
+    });
+  };
+
+  const getEventStatus = (event, date) => {
+    const eventStart = new Date(event.tanggal_mulai);
+    const eventEnd = new Date(event.tanggal_selesai);
+    const isFirstDay = eventStart.toDateString() === date.toDateString();
+    const isLastDay = eventEnd.toDateString() === date.toDateString();
+
+    if (isFirstDay && isLastDay) return "single";
+    if (isFirstDay) return "start";
+    if (isLastDay) return "end";
+    return "middle";
+  };
+
   return (
     <div className="h-screen p-4 bg-background text-foreground">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">
-          {currentDate.toLocaleString("default", {
+          {currentDate.toLocaleString("id-ID", {
             month: "long",
             year: "numeric",
           })}
@@ -121,10 +141,38 @@ export function BigCalendar({ agendaAction, agendaData }) {
                   } ${
                     date.toDateString() === new Date().toDateString()
                       ? "bg-lblue text-white rounded-full w-6 h-6 flex items-center justify-center"
-                      : ""
+                      : "w-6 h-6"
                   }`}
                 >
                   {date.getDate()}
+                </div>
+                <div className="mt-1">
+                  {getEventsForDate(date).map((event, eventIndex) => {
+                    const status = getEventStatus(event, date);
+                    const isPastEvent =
+                      new Date(event.tanggal_selesai) < new Date() &&
+                      new Date(event.tanggal_selesai).toDateString() !==
+                        new Date().toDateString();
+                    return (
+                      <div
+                        key={eventIndex}
+                        className={`text-xs p-1 mb-1 truncate ${
+                          status === "middle" || status === "end" ? "pl-4" : ""
+                        } ${
+                          isPastEvent ? "bg-blue-300" : "bg-blue-500"
+                        } text-white`}
+                        title={`${event.nama_agenda}\nFrom: ${new Date(
+                          event.tanggal_mulai
+                        ).toLocaleString()}\nTo: ${new Date(
+                          event.tanggal_selesai
+                        ).toLocaleString()}`}
+                      >
+                        {status === "single" || status === "start"
+                          ? event.nama_agenda
+                          : "\u00A0"}
+                      </div>
+                    );
+                  })}
                 </div>
               </>
             )}
