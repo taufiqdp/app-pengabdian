@@ -5,7 +5,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-      - ./backend/data.db:/app/data.db
+      - ./backend/desa.db:/app/desa.db
     env_file:
       - ./backend/.env
 
