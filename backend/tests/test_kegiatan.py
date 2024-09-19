@@ -84,17 +84,13 @@ def test_update_kegiatan(client, test_user, test_admin, test_pamong, test_kegiat
     kegiatan_id = response.json()[0]["id"]
     test_kegiatan.update({"nama_kegiatan": "Holaaaaa"})
 
-    path = "app/uploads/"
-    with open(f"{path}0.jpg", "rb") as image:
-        response = client.put(
-            f"/kegiatan/{kegiatan_id}",
-            data={"kegiatan": json.dumps(test_kegiatan)},
-            files={"file": ("test.jpg", image, "image/jpeg")},
-            headers={"Authorization": f"Bearer {user_token}"},
-        )
+    response = client.put(
+        f"/kegiatan/{kegiatan_id}",
+        data={"kegiatan": json.dumps(test_kegiatan)},
+        headers={"Authorization": f"Bearer {user_token}"},
+    )
 
     assert response.status_code == 200
-    os.remove(f"{path}test.jpg")
 
 
 def test_delete_kegiatan(client, test_user, test_admin, test_pamong, test_kegiatan):

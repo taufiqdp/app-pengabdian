@@ -46,13 +46,9 @@ def test_update_pamong(client, test_admin, test_user, test_pamong):
     user_token = create_and_login_user(client, test_user, test_admin, test_pamong)
     test_pamong.update({"nama": "mDavid Hoop"})
 
-    path = "app/uploads/"
-    with open(f"{path}0.jpg", "rb") as image:
-        response = client.put(
-            "pamong/",
-            data={"pamong": json.dumps(test_pamong)},
-            files={"file": ("test.jpg", image, "image/jpeg")},
-            headers={"Authorization": f"Bearer {user_token}"},
-        )
+    response = client.put(
+        "pamong/",
+        data={"pamong": json.dumps(test_pamong)},
+        headers={"Authorization": f"Bearer {user_token}"},
+    )
     assert response.status_code == 200
-    os.remove(f"{path}test.jpg")

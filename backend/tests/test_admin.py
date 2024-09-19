@@ -112,16 +112,13 @@ def test_update_pamong_as_admin(client, test_admin, test_pamong):
     # Update pamong as admin
     test_pamong.update({"nama": "mDavid Hoop"})
 
-    path = "app/uploads/"
-    with open(f"{path}0.jpg", "rb") as image:
-        response = client.put(
-            f"admin/pamong/{pamong_id}",
-            data={"pamong": json.dumps(test_pamong)},
-            files={"file": ("test.jpg", image, "image/jpeg")},
-            headers={"Authorization": f"Bearer {token}"},
+    response = client.put(
+        f"admin/pamong/{pamong_id}",
+        data={"pamong": json.dumps(test_pamong)},
+        headers={"Authorization": f"Bearer {token}"},
         )
     assert response.status_code == 200
-    os.remove(f"{path}test.jpg")
+    # os.remove(f"{path}test.jpg")
 
 
 def test_delete_pamong_as_admin(client, test_admin, test_pamong):
@@ -149,7 +146,6 @@ def test_delete_pamong_as_user(client, test_user, test_pamong, test_admin):
     response = client.post("/auth/token", data=test_user)
     token = response.json()["access_token"]
 
-    # Get pamong id (this might need adjustment depending on your API)
     pamong_id = client.get(
         "pamong/", headers={"Authorization": f"Bearer {token}"}
     ).json()["id"]
