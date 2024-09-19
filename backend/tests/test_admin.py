@@ -116,7 +116,7 @@ def test_update_pamong_as_admin(client, test_admin, test_pamong):
         f"admin/pamong/{pamong_id}",
         data={"pamong": json.dumps(test_pamong)},
         headers={"Authorization": f"Bearer {token}"},
-        )
+    )
     assert response.status_code == 200
     # os.remove(f"{path}test.jpg")
 

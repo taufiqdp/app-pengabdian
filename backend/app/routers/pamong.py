@@ -84,7 +84,7 @@ async def create_pamong(
     if file:
         image = await file.read()
         image_path = f"profile/{uuid.uuid4()}_{file.filename}"
-        
+
         image_file = io.BytesIO(image)
 
         res = upload_file_to_s3(
@@ -92,7 +92,7 @@ async def create_pamong(
             secret_access_key=SECRET_ACCESS_KEY,
             bucket_name=BUCKET_NAME,
             object_key=image_path,
-            object=image_file
+            object=image_file,
         )
 
         if not res:
@@ -100,12 +100,11 @@ async def create_pamong(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Failed to upload image",
             )
-        
+
     new_pamong = Pamong(
         **pamong.model_dump(),
         gambar=f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}" if file else None,
     )
-        
 
     db.add(new_pamong)
     db.commit()
@@ -157,7 +156,7 @@ async def update_pamong(
 
         image = await file.read()
         image_path = f"profile/{uuid.uuid4()}_{file.filename}"
-        
+
         image_file = io.BytesIO(image)
 
         res = upload_file_to_s3(
@@ -165,7 +164,7 @@ async def update_pamong(
             secret_access_key=SECRET_ACCESS_KEY,
             bucket_name=BUCKET_NAME,
             object_key=image_path,
-            object=image_file
+            object=image_file,
         )
 
         if not res:

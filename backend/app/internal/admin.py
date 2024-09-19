@@ -131,7 +131,7 @@ async def update_pamong(
 
         image = await file.read()
         image_path = f"profile/{uuid.uuid4()}_{file.filename}"
-        
+
         image_file = io.BytesIO(image)
 
         res = upload_file_to_s3(
@@ -139,7 +139,7 @@ async def update_pamong(
             secret_access_key=SECRET_ACCESS_KEY,
             bucket_name=BUCKET_NAME,
             object_key=image_path,
-            object=image_file
+            object=image_file,
         )
 
         if not res:
@@ -160,9 +160,7 @@ async def update_pamong(
 
 
 @router.delete("/pamong/{pamong_id}")
-async def delete_pamong(db: db_dependency, pamong_id: int, 
-                        admin: admin_dependency
-                        ):
+async def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependency):
     pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
 
     if pamong.gambar:

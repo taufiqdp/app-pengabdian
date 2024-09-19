@@ -54,7 +54,7 @@ async def create_kegiatan(
     if file:
         image = await file.read()
         image_path = f"kegiatan/{uuid.uuid4()}_{file.filename}"
-        
+
         image_file = io.BytesIO(image)
 
         res = upload_file_to_s3(
@@ -62,7 +62,7 @@ async def create_kegiatan(
             secret_access_key=SECRET_ACCESS_KEY,
             bucket_name=BUCKET_NAME,
             object_key=image_path,
-            object=image_file
+            object=image_file,
         )
 
         if not res:
@@ -70,7 +70,7 @@ async def create_kegiatan(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Failed to upload image",
             )
-        
+
         new_kegiatan.gambar = f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}"
 
     db.add(new_kegiatan)
@@ -153,7 +153,7 @@ async def update_kegiatan(
 
         image = await file.read()
         image_path = f"kegiatan/{uuid.uuid4()}_{file.filename}"
-        
+
         image_file = io.BytesIO(image)
 
         res = upload_file_to_s3(
@@ -161,7 +161,7 @@ async def update_kegiatan(
             secret_access_key=SECRET_ACCESS_KEY,
             bucket_name=BUCKET_NAME,
             object_key=image_path,
-            object=image_file
+            object=image_file,
         )
 
         if not res:
@@ -169,9 +169,8 @@ async def update_kegiatan(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Failed to upload image",
             )
-        
-        kegiatan_data.gambar = f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}"
 
+        kegiatan_data.gambar = f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}"
 
     db.commit()
     db.refresh(kegiatan_data)
@@ -192,7 +191,7 @@ async def delete_kegiatan(kegiatan_id: int, db: db_dependency, user: user_depend
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not allowed to delete this kegiatan",
         )
-    
+
     if kegiatan.gambar:
         res = delete_file_from_s3(
             access_key_id=ACCESS_KEY_ID,

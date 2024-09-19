@@ -2,7 +2,7 @@ install:
 	pip install -r requirements.txt
 
 format:
-	black *py app/*py app/routers/*py app/internal/*py tests/*py app/helper/*py
+	python -m black *py app/*py app/routers/*py app/internal/*py tests/*py app/helper/*py
 
 testing:
 	python -m pytest
