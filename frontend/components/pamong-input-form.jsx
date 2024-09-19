@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,21 @@ export default function PamongInputForm({
   defaultValues = null,
 }) {
   const [state, formAction] = useFormState(pamongAction, defaultValues || {});
+  const [imageSrc, setImageSrc] = useState(
+    defaultValues?.gambar || profileImage
+  );
   const router = useRouter();
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="container-fluid">
@@ -40,17 +54,33 @@ export default function PamongInputForm({
             <CardHeader>Foto Profile</CardHeader>
             <CardContent>
               <div className="text-center">
-                <div className="w-full max-w-[250px] h-0 pb-[100%] relative overflow-hidden rounded-full mx-auto mb-2">
+                <div className="w-64 h-64 relative mx-auto mb-4">
                   <Image
-                    src={profileImage}
+                    src={imageSrc}
                     alt="Profile Picture"
-                    className="absolute top-1/2 left-1/2 w-full h-full object-cover -translate-x-1/2 -translate-y-1/2"
+                    fill
+                    className="rounded-full object-cover"
                   />
                 </div>
                 <div className="text-sm text-gray-500 mb-4">
-                  JPG atau PNG max. 5 MB
+                  Maksimal ukuran 5 MB
                 </div>
-                <Input type="file" accept="image/*" name="image" />
+                <label
+                  htmlFor="upload-foto"
+                  className="cursor-pointer inline-block"
+                >
+                  <span className="bg-lblue hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
+                    Unggah Foto
+                  </span>
+                  <input
+                    id="upload-foto"
+                    type="file"
+                    accept="image/*"
+                    name="image"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                </label>
               </div>
             </CardContent>
           </Card>
