@@ -27,7 +27,7 @@ export async function pamongEditAction(prevState, formData) {
   const newFormData = new FormData();
   newFormData.append("pamong", JSON.stringify(pamongData));
 
-  const file = formData.get("file");
+  const file = formData.get("image");
   if (file && file.size > 0) {
     newFormData.append("file", file);
   }
