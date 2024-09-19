@@ -4,6 +4,9 @@ from datetime import date
 from typing import Union
 from pydantic import Json
 from dotenv import load_dotenv
+from openpyxl import Workbook
+from tempfile import NamedTemporaryFile
+from typing import List
 import os
 import io
 import uuid
@@ -220,6 +223,66 @@ async def get_kegiatan(
 
     return kegiatan_dict
 
+@router.get("/kegiatan/export")
+async def export_kegiatan_to_excel(
+    db: db_dependency,
+    start_date: date,
+    end_date: date,
+    # admin: admin_dependency
+):
+    kegiatan_all = (
+        db.query(Kegiatan)
+        .filter(Kegiatan.tanggal >= start_date)
+        .filter(Kegiatan.tanggal <= end_date)
+        .all()
+    )
+
+    if not kegiatan_all:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Kegiatan not found"
+        )
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Kegiatan"
+
+    headers = ["ID", "Nama Kegiatan", "Tanggal", "Tempat", "Deskripsi", "Gambar", "Nama Pamong", "NIP"]
+    ws.append(headers)
+
+    for kegiatan in kegiatan_all:
+        ws.append([
+            kegiatan.id,
+            kegiatan.nama_kegiatan,
+            kegiatan.tanggal,
+            kegiatan.tempat,
+            kegiatan.deskripsi,
+            kegiatan.gambar,
+            kegiatan.user.pamong.nama,
+            kegiatan.user.pamong.nip,
+        ])
+
+    # Save the workbook to an in-memory buffer
+    with io.BytesIO() as buffer:
+        wb.save(buffer)
+        buffer.seek(0)  # Reset the buffer position to the beginning
+
+        # Upload the buffer to S3
+        file_key = f"exports/kegiatan_{start_date}_to_{end_date}.xlsx"
+        res = upload_file_to_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=file_key,
+            object=buffer,
+        )
+
+        if not res:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to upload file to S3",
+            )
+
+    return {"file_url": f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{file_key}"}
 
 @router.get("/kegiatan/{kegiatan_id}")
 async def get_kegiatan_by_id(
