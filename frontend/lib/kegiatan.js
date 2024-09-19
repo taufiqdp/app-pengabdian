@@ -46,6 +46,38 @@ export async function getKegiatanByDate(startDate, endDate) {
   }
 }
 
+export async function exportKegiatanByDate(startDate, endDate) {
+  const utc7Now = new Date();
+  const today = formatDate(utc7Now);
+
+  startDate = startDate || today;
+  endDate = endDate || today;
+
+  const bearer = getAccessToken();
+
+  try {
+    const response = await fetch(
+      `${process.env.BASE_API_URL}admin/kegiatan/export?start_date=${startDate}&end_date=${endDate}`,
+      {
+        headers: {
+          Authorization: `Bearer ${bearer}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return {
+        error: `Network response was not ok: ${response.status} ${response.statusText}`,
+      };
+    }
+
+    const file_url = await response.json();
+    return file_url;
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
 export async function getKegiatanToday() {
   const utc7Now = new Date();
   const today = formatDate(utc7Now);
