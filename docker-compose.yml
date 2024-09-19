@@ -1,19 +1,30 @@
 services:
   backend:
     build: ./backend
+    image: taufiqdp/pengabdian-backend:latest
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
       - ./backend/desa.db:/app/desa.db
     env_file:
       - ./backend/.env
+    develop:
+      watch:
+        - path: ./backend
+          target: /app
+          action: sync
 
   frontend:
     build: ./frontend
+    image: taufiqdp/pengabdian-frontend:latest
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
     restart: unless-stopped
     env_file: ./frontend/.env
+    develop:
+      watch:
+        - path: ./frontend
+          target: /app
+          action: sync
