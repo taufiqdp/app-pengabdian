@@ -3,12 +3,24 @@ from fastapi.responses import FileResponse
 from datetime import date
 from typing import Union
 from pydantic import Json
+from dotenv import load_dotenv
+import os
+import io
+import uuid
 
 from app.models import User, Kegiatan, Pamong
 from app.dependencies import db_dependency, admin_dependency
 from app.routers.pamong import PamongBase
+from app.utils.utils import upload_file_to_s3, delete_file_from_s3
+
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
+load_dotenv(override=True)
+ACCESS_KEY_ID = os.getenv("ACCESS_KEY_ID")
+SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY")
+BUCKET_NAME = os.getenv("BUCKET_NAME")
+S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL")
 
 
 @router.get("/users")
@@ -103,14 +115,40 @@ async def update_pamong(
             status_code=status.HTTP_404_NOT_FOUND, detail="Pamong not found"
         )
 
-    uploads_path = "app/uploads/"
-
     if file:
+        if pamong_data.gambar:
+            res = delete_file_from_s3(
+                access_key_id=ACCESS_KEY_ID,
+                secret_access_key=SECRET_ACCESS_KEY,
+                bucket_name=BUCKET_NAME,
+                object_key=f"profile/{pamong_data.gambar.split('/')[-1]}",
+            )
+
+            if not res:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
         image = await file.read()
-        image_path = f"{uploads_path}{file.filename}"
-        with open(image_path, "wb") as dump:
-            dump.write(image)
-        pamong_data.gambar = image_path
+        image_path = f"profile/{uuid.uuid4()}_{file.filename}"
+        
+        image_file = io.BytesIO(image)
+
+        res = upload_file_to_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=image_path,
+            object=image_file
+        )
+
+        if not res:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to upload image",
+            )
+
+        pamong_data.gambar = f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}"
 
     for key, value in pamong.model_dump(exclude_unset=True).items():
         setattr(pamong_data, key, value)
@@ -122,8 +160,23 @@ async def update_pamong(
 
 
 @router.delete("/pamong/{pamong_id}")
-async def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependency):
+async def delete_pamong(db: db_dependency, pamong_id: int, 
+                        admin: admin_dependency
+                        ):
     pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
+
+    if pamong.gambar:
+        res = delete_file_from_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=f"profile/{pamong.gambar.split('/')[-1]}",
+        )
+
+        if not res:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
     if not pamong:
         raise HTTPException(
@@ -134,23 +187,6 @@ async def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependen
     db.commit()
 
     return {"detail": "Pamong deleted"}
-
-
-@router.get("/pamong/{pamong_id}/image")
-async def get_pamong_image(pamong_id: int, db: db_dependency, admin: admin_dependency):
-    pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
-
-    if not pamong:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Pamong not found"
-        )
-
-    try:
-        return FileResponse(pamong.gambar)
-    except FileNotFoundError:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Image not found"
-        )
 
 
 @router.get("/kegiatan")
