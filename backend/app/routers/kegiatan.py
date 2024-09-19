@@ -2,11 +2,23 @@ from pydantic import BaseModel, Json
 from fastapi import APIRouter, status, HTTPException, UploadFile, File
 from datetime import datetime
 from typing import Optional, Union
+from dotenv import load_dotenv
+import io
+import os
+import uuid
 
 from app.models import Kegiatan
 from app.dependencies import db_dependency, user_dependency
+from app.utils.utils import upload_file_to_s3, delete_file_from_s3
+
 
 router = APIRouter(prefix="/kegiatan", tags=["kegiatan"])
+
+load_dotenv(override=True)
+ACCESS_KEY_ID = os.getenv("ACCESS_KEY_ID")
+SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY")
+BUCKET_NAME = os.getenv("BUCKET_NAME")
+S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL")
 
 
 class KegiatanCreateRequest(BaseModel):
@@ -37,13 +49,29 @@ async def create_kegiatan(
         user_id=user["id"],
     )
 
-    uploads_path = "app/uploads/"
+    image_path = None
 
     if file:
         image = await file.read()
-        with open(f"{uploads_path}{file.filename}", "wb") as dump:
-            dump.write(image)
-        new_kegiatan.gambar = f"{uploads_path}{file.filename}"
+        image_path = f"kegiatan/{uuid.uuid4()}_{file.filename}"
+        
+        image_file = io.BytesIO(image)
+
+        res = upload_file_to_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=image_path,
+            object=image_file
+        )
+
+        if not res:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to upload image",
+            )
+        
+        new_kegiatan.gambar = f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}"
 
     db.add(new_kegiatan)
     db.commit()
@@ -110,10 +138,40 @@ async def update_kegiatan(
     kegiatan_data.deskripsi = kegiatan.deskripsi
 
     if file:
+        if kegiatan_data.gambar:
+            res = delete_file_from_s3(
+                access_key_id=ACCESS_KEY_ID,
+                secret_access_key=SECRET_ACCESS_KEY,
+                bucket_name=BUCKET_NAME,
+                object_key=f"kegiatan/{kegiatan_data.gambar.split('/')[-1]}",
+            )
+
+            if not res:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
         image = await file.read()
-        with open(f"app/uploads/{file.filename}", "wb") as dump:
-            dump.write(image)
-        kegiatan_data.gambar = file.filename
+        image_path = f"kegiatan/{uuid.uuid4()}_{file.filename}"
+        
+        image_file = io.BytesIO(image)
+
+        res = upload_file_to_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=image_path,
+            object=image_file
+        )
+
+        if not res:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to upload image",
+            )
+        
+        kegiatan_data.gambar = f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}"
+
 
     db.commit()
     db.refresh(kegiatan_data)
@@ -134,6 +192,19 @@ async def delete_kegiatan(kegiatan_id: int, db: db_dependency, user: user_depend
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not allowed to delete this kegiatan",
         )
+    
+    if kegiatan.gambar:
+        res = delete_file_from_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=f"kegiatan/{kegiatan.gambar.split('/')[-1]}",
+        )
+
+        if not res:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
     db.delete(kegiatan)
     db.commit()

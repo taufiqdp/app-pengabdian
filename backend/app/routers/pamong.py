@@ -2,16 +2,24 @@ from fastapi import APIRouter, HTTPException, status, UploadFile, File
 from pydantic import BaseModel, Json
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
 from typing import Optional, Union
-from PIL import Image
+from dotenv import load_dotenv
 import io
+import os
+import uuid
 
 
 from app.dependencies import db_dependency, admin_dependency, user_dependency
 from app.models import Pamong, User
+from app.utils.utils import upload_file_to_s3, delete_file_from_s3
 
 router = APIRouter(prefix="/pamong", tags=["pamong"])
+
+load_dotenv(override=True)
+ACCESS_KEY_ID = os.getenv("ACCESS_KEY_ID")
+SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY")
+BUCKET_NAME = os.getenv("BUCKET_NAME")
+S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT_URL")
 
 
 class StatusKawinEnum(str, Enum):
@@ -71,14 +79,33 @@ async def create_pamong(
             status_code=status.HTTP_409_CONFLICT, detail="Pamong already exists"
         )
 
-    new_pamong = Pamong(**pamong.model_dump())
+    image_path = None
 
-    uploads_path = "app/uploads/"
     if file:
         image = await file.read()
-        with open(f"{uploads_path}{file.filename}", "wb") as dump:
-            dump.write(image)
-        new_pamong.gambar = f"{uploads_path}{file.filename}"
+        image_path = f"profile/{uuid.uuid4()}_{file.filename}"
+        
+        image_file = io.BytesIO(image)
+
+        res = upload_file_to_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=image_path,
+            object=image_file
+        )
+
+        if not res:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to upload image",
+            )
+        
+    new_pamong = Pamong(
+        **pamong.model_dump(),
+        gambar=f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}" if file else None,
+    )
+        
 
     db.add(new_pamong)
     db.commit()
@@ -115,10 +142,39 @@ async def update_pamong(
     pamong_to_update = user_data.pamong
 
     if file:
+        if pamong_to_update.gambar:
+            res = delete_file_from_s3(
+                access_key_id=ACCESS_KEY_ID,
+                secret_access_key=SECRET_ACCESS_KEY,
+                bucket_name=BUCKET_NAME,
+                object_key=f"profile/{pamong_to_update.gambar.split('/')[-1]}",
+            )
+
+            if not res:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
         image = await file.read()
-        with open(f"app/uploads/{file.filename}", "wb") as dump:
-            dump.write(image)
-        pamong_to_update.gambar = file.filename
+        image_path = f"profile/{uuid.uuid4()}_{file.filename}"
+        
+        image_file = io.BytesIO(image)
+
+        res = upload_file_to_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=image_path,
+            object=image_file
+        )
+
+        if not res:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to upload image",
+            )
+
+        pamong_to_update.gambar = f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}"
 
     for key, value in pamong.model_dump(exclude_unset=True).items():
         setattr(pamong_to_update, key, value)
