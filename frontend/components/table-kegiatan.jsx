@@ -9,14 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, ArrowUpDown } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 
 export default function TableKegiatan({ dataKegiatan }) {
-  const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState("asc");
-  const itemsPerPage = 10;
 
   const sortedData = [...dataKegiatan].sort((a, b) => {
     const dateA = new Date(a.tanggal);
@@ -24,14 +21,8 @@ export default function TableKegiatan({ dataKegiatan }) {
     return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
   });
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentActivities = sortedData.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
-
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    setCurrentPage(1);
   };
 
   return (
@@ -54,7 +45,7 @@ export default function TableKegiatan({ dataKegiatan }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentActivities.map((kegiatan, index) => (
+          {sortedData.map((kegiatan, index) => (
             <TableRow key={index}>
               <TableCell>{kegiatan.tanggal}</TableCell>
               <TableCell>
@@ -78,32 +69,6 @@ export default function TableKegiatan({ dataKegiatan }) {
           ))}
         </TableBody>
       </Table>
-
-      <div className="flex justify-between items-center">
-        <div className="text-gray-700 font-light">
-          Menampilkan {indexOfFirstItem + 1} sampai{" "}
-          {Math.min(indexOfLastItem, sortedData.length)} dari{" "}
-          {sortedData.length} kegiatan
-        </div>
-        <div className="flex items-center justify-end space-x-2 min-w-36">
-          <Button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="bg-lblue text-white hover:bg-blue-500"
-          >
-            <ArrowLeft />
-          </Button>
-          <Button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-            className="bg-lblue text-white hover:bg-blue-500"
-          >
-            <ArrowRight />
-          </Button>
-        </div>
-      </div>
     </>
   );
 }
