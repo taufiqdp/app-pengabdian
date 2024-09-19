@@ -27,7 +27,6 @@ export async function pamongInputAction(prevState, formData) {
 
   const file = formData.get("image");
   if (file && file.size > 0) {
-    console.log(file);
     newFormData.append("file", file);
   }
 
