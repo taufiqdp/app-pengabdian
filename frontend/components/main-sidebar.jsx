@@ -60,10 +60,13 @@ export default function MainSidebar({ children }) {
       <TopNavbar toggleSidebar={toggleSidebar} />
 
       <div
-        className={`fixed flex flex-col top-0 left-0 h-full w-64 bg-lblue text-white p-5 transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed flex flex-col top-0 left-0 h-full w-64 bg-lblue text-white shadow-2xl p-5 transform transition-transform duration-300 ease-in-out z-50 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 overflow-y-auto`}
       >
+        <div className="flex flex-row items-center gap-2 border-b pb-5">
+          <h1 className="text-2xl">LaporSemanu</h1>
+        </div>
         <button
           onClick={toggleSidebar}
           className="absolute top-4 right-4 md:hidden"
@@ -71,11 +74,8 @@ export default function MainSidebar({ children }) {
           <X size={24} />
         </button>
 
-        <div className="flex flex-row items-center gap-2">
-          <h1 className="text-2xl uppercase"> </h1>
-        </div>
-        <nav>
-          <hr className="border-t border-blue-100 my-5" />
+        <nav className="mt-6">
+          {/* <hr className="border-t border-blue-100 my-5" /> */}
 
           <ul className="space-y-2">
             {menuItems.map((item, index) => (

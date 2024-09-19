@@ -42,7 +42,7 @@ export async function PamongDetail({ idPamong }) {
       <div className="bg-card rounded-lg shadow-md p-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
           <Avatar className="w-32 h-32">
-            <AvatarImage src="" alt={dataPamong.nama} />
+            <AvatarImage src={dataPamong.gambar} alt={dataPamong.nama} />
             <AvatarFallback>{dataPamong.nama}</AvatarFallback>
           </Avatar>
           <div>

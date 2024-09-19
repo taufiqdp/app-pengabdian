@@ -15,6 +15,7 @@ export async function Dashboard() {
       </div>
 
       <div className="space-y-6 shadow-md bg-white p-4 rounded-lg">
+        <div className="font-medium">Kegiatan Hari Ini</div>
         <div className="flex justify-between">
           <Input placeholder="Cari kegiatan..." className="sm:max-w-sm w-64" />
           <Link
