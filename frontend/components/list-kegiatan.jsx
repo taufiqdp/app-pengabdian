@@ -1,13 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getKegiatanThisMonth, getKegiatanByDate } from "@/lib/kegiatan";
+import {
+  getKegiatanThisMonth,
+  getKegiatanByDate,
+  exportKegiatanByDate,
+} from "@/lib/kegiatan";
 import TableKegiatan from "./table-kegiatan";
+import { Download, Ellipsis } from "lucide-react";
 
 export default function ListKegiatan() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [dataKegiatan, setDataKegiatan] = useState([]);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -23,6 +29,21 @@ export default function ListKegiatan() {
     event.preventDefault();
     const data = await getKegiatanByDate(startDate, endDate);
     setDataKegiatan(data.kegiatan);
+  };
+
+  const handleDownload = async () => {
+    setIsDownloading(true);
+
+    const { file_url } = await exportKegiatanByDate(startDate, endDate);
+    const link = document.createElement("a");
+    link.href = file_url;
+    link.target = "_blank";
+    link.download = `kegiatan_${startDate}_to_${endDate}.xlsx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setIsDownloading(false);
   };
 
   return (
@@ -63,12 +84,22 @@ export default function ListKegiatan() {
             className="px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        <div className="flex items-end bottom-0">
+        <div className="flex items-end gap-2 bottom-0">
           <button
             type="submit"
             className="bg-lblue text-white px-2 py-2 h-11 w-16 rounded-md hover:bg-blue-500"
           >
             Filter
+          </button>
+          <button
+            type="button"
+            onClick={handleDownload}
+            className={`
+              ${isDownloading ? "opacity-50 cursor-not-allowed" : ""}
+              border-2 hover:bg-lblue hover:text-white px-2 py-2 h-11 w-11 rounded-md  flex items-center justify-center`}
+            title="Download Excel"
+          >
+            {isDownloading ? <Ellipsis size={20} /> : <Download size={20} />}
           </button>
         </div>
       </form>
