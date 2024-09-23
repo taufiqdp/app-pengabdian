@@ -62,6 +62,32 @@ export async function getAgendaThisMonth() {
   }
 }
 
+export async function getUpcomingAgenda() {
+  const bearer = getAccessToken();
+
+  try {
+    const response = await fetch(
+      `${process.env.BASE_API_URL}admin/agenda/upcoming`,
+      {
+        headers: {
+          Authorization: `Bearer ${bearer}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return {
+        error: `Network response was not ok: ${response.status} ${response.statusText}`,
+      };
+    }
+
+    const agenda = await response.json();
+    return { agenda };
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
 export async function deleteAgendaById(idAgenda) {
   const bearer = getAccessToken();
 
