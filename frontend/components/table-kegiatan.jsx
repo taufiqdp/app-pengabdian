@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   Table,
   TableBody,
@@ -23,51 +23,53 @@ import Link from "next/link";
 
 export default function TableKegiatan({ dataKegiatan }) {
   const [sortOrder, setSortOrder] = useState("asc");
-  const [selectedKegiatan, setSelectedKegiatan] = useState(dataKegiatan);
+  const [selectedValue, setSelectedValue] = useState("Semua");
 
-  const sortedData = [...selectedKegiatan].sort((a, b) => {
-    const dateA = new Date(a.tanggal);
-    const dateB = new Date(b.tanggal);
-    return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-  });
-
-  const listNamaKegiatan = removeDuplicates(
-    dataKegiatan.map((kegiatan) => kegiatan.nama_kegiatan)
-  );
-
-  const toggleSortOrder = () => {
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  };
-
-  const handleSelectChange = (value) => {
-    const filtered = dataKegiatan.filter(
-      (kegiatan) => kegiatan.nama_kegiatan === value
+  const listNamaKegiatan = useMemo(() => {
+    const uniqueKegiatan = new Set(
+      dataKegiatan.map((kegiatan) => kegiatan.nama_kegiatan)
     );
-    setSelectedKegiatan(filtered);
-  };
+    return ["Semua", ...Array.from(uniqueKegiatan)];
+  }, [dataKegiatan]);
+
+  const sortedData = useMemo(() => {
+    const filteredData =
+      selectedValue === "Semua"
+        ? dataKegiatan
+        : dataKegiatan.filter(
+            (kegiatan) => kegiatan.nama_kegiatan === selectedValue
+          );
+
+    return filteredData.sort((a, b) => {
+      const dateA = new Date(a.tanggal);
+      const dateB = new Date(b.tanggal);
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+  }, [dataKegiatan, selectedValue, sortOrder]);
+
+  const toggleSortOrder = useCallback(() => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  }, []);
+
+  const handleSelectChange = useCallback((value) => {
+    setSelectedValue(value);
+  }, []);
 
   return (
     <>
-      <Select
-        onValueChange={handleSelectChange}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
+      <Select onValueChange={handleSelectChange} defaultValue="Semua">
         <SelectTrigger className="w-[400px]">
           <SelectValue placeholder="Pilih kegiatan" />
         </SelectTrigger>
         <SelectContent>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Nama Kegiatan</SelectLabel>
-              {listNamaKegiatan.map((kegiatan, index) => (
-                <SelectItem key={index} value={kegiatan}>
-                  {kegiatan}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
+          <SelectGroup>
+            <SelectLabel>Nama Kegiatan</SelectLabel>
+            {listNamaKegiatan.map((kegiatan) => (
+              <SelectItem key={kegiatan} value={kegiatan}>
+                {kegiatan}
+              </SelectItem>
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
       <Table>
@@ -88,8 +90,8 @@ export default function TableKegiatan({ dataKegiatan }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedData.map((kegiatan, index) => (
-            <TableRow key={index}>
+          {sortedData.map((kegiatan) => (
+            <TableRow key={kegiatan.id}>
               <TableCell>{kegiatan.tanggal}</TableCell>
               <TableCell>
                 <Link
@@ -114,8 +116,4 @@ export default function TableKegiatan({ dataKegiatan }) {
       </Table>
     </>
   );
-}
-
-function removeDuplicates(arr) {
-  return [...new Set(arr)];
 }
