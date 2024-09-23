@@ -1,8 +1,6 @@
-import Link from "next/link";
 import CountCards from "./count-cards";
 import TableKegiatan from "./table-kegiatan";
 import { Input } from "./ui/input";
-import { DownloadIcon } from "lucide-react";
 import { getKegiatanToday } from "@/lib/kegiatan";
 
 export async function Dashboard() {
@@ -18,14 +16,6 @@ export async function Dashboard() {
         <div className="font-medium">Kegiatan Hari Ini</div>
         <div className="flex justify-between">
           <Input placeholder="Cari kegiatan..." className="sm:max-w-sm w-64" />
-          <Link
-            href="#"
-            className="flex gap-2 items-center border px-2 rounded-lg shadow-sm hover:bg-lblue hover:text-white"
-          >
-            <DownloadIcon size={18} />
-
-            <p>Unduh Laporan</p>
-          </Link>
         </div>
         {data.kegiatan ? (
           <TableKegiatan dataKegiatan={data.kegiatan} />

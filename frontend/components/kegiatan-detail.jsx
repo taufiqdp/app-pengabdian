@@ -17,15 +17,23 @@ export async function KegiatanDetailComponent({ idKegiatan }) {
   return (
     <div className="bg-background rounded-md shadow-md">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="relative h-[40vh] md:h-[40vh] w-[40hv]">
-          <Image
-            src={dataKegiatan.gambar}
-            alt={dataKegiatan.nama_kegiatan}
-            fill
-            priority
-            className="h-full w-full object-cover rounded-md"
-          />
-        </div>
+        {dataKegiatan.gambar ? (
+          <div className="relative h-[40vh] md:h-[40vh] w-[40hv]">
+            <Image
+              src={dataKegiatan.gambar}
+              alt={dataKegiatan.nama_kegiatan}
+              fill
+              priority
+              className="h-full w-full object-cover rounded-md"
+            />
+          </div>
+        ) : (
+          <div className="relative h-[40vh] md:h-[40vh] w-[40hv] bg-gray-200 rounded-md">
+            <p className="text-center text-gray-500 py-10">
+              Gambar tidak tersedia.
+            </p>
+          </div>
+        )}
 
         <div>
           <div className="flex flex-wrap gap-6 mb-8">
