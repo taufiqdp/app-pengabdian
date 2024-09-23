@@ -104,7 +104,7 @@ export default function ListKegiatan() {
         </div>
       </form>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto mt-2">
         {!dataKegiatan ? (
           <div>Data Kosong</div>
         ) : (

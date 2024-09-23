@@ -9,24 +9,67 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 
 export default function TableKegiatan({ dataKegiatan }) {
   const [sortOrder, setSortOrder] = useState("asc");
+  const [selectedKegiatan, setSelectedKegiatan] = useState(dataKegiatan);
 
-  const sortedData = [...dataKegiatan].sort((a, b) => {
+  const sortedData = [...selectedKegiatan].sort((a, b) => {
     const dateA = new Date(a.tanggal);
     const dateB = new Date(b.tanggal);
     return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
   });
 
+  const listNamaKegiatan = removeDuplicates(
+    dataKegiatan.map((kegiatan) => kegiatan.nama_kegiatan)
+  );
+
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
+  const handleSelectChange = (value) => {
+    const filtered = dataKegiatan.filter(
+      (kegiatan) => kegiatan.nama_kegiatan === value
+    );
+    setSelectedKegiatan(filtered);
+  };
+
   return (
     <>
+      <Select
+        onValueChange={handleSelectChange}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <SelectTrigger className="w-[400px]">
+          <SelectValue placeholder="Pilih kegiatan" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Nama Kegiatan</SelectLabel>
+              {listNamaKegiatan.map((kegiatan, index) => (
+                <SelectItem key={index} value={kegiatan}>
+                  {kegiatan}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </SelectContent>
+      </Select>
       <Table>
         <TableHeader>
           <TableRow>
@@ -71,4 +114,8 @@ export default function TableKegiatan({ dataKegiatan }) {
       </Table>
     </>
   );
+}
+
+function removeDuplicates(arr) {
+  return [...new Set(arr)];
 }
