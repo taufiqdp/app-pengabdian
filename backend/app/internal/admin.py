@@ -1,17 +1,16 @@
 from fastapi import APIRouter, HTTPException, status, UploadFile, File
-from fastapi.responses import FileResponse
 from datetime import date
-from typing import Union
+from typing import Union, Optional
 from pydantic import Json
 from dotenv import load_dotenv
 from openpyxl import Workbook
-from tempfile import NamedTemporaryFile
 from typing import List
+from datetime import datetime
 import os
 import io
 import uuid
 
-from app.models import User, Kegiatan, Pamong
+from app.models import User, Kegiatan, Pamong, Agenda
 from app.dependencies import db_dependency, admin_dependency
 from app.routers.pamong import PamongBase
 from app.utils.utils import upload_file_to_s3, delete_file_from_s3
@@ -192,14 +191,28 @@ async def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependen
 
 @router.get("/kegiatan")
 async def get_kegiatan(
-    db: db_dependency, start_date: date, end_date: date, admin: admin_dependency
+    db: db_dependency,
+    start_date: date,
+    end_date: date,
+    admin: admin_dependency,
+    name_kegiatan: Optional[str] = None,
 ):
-    kegiatan_all = (
-        db.query(Kegiatan)
-        .filter(Kegiatan.tanggal >= start_date)
-        .filter(Kegiatan.tanggal <= end_date)
-        .all()
-    )
+    if name_kegiatan:
+        kegiatan_all = (
+            db.query(Kegiatan)
+            .filter(Kegiatan.tanggal >= start_date)
+            .filter(Kegiatan.tanggal <= end_date)
+            .filter(Kegiatan.nama_kegiatan == name_kegiatan)
+            .all()
+        )
+
+    else:
+        kegiatan_all = (
+            db.query(Kegiatan)
+            .filter(Kegiatan.tanggal >= start_date)
+            .filter(Kegiatan.tanggal <= end_date)
+            .all()
+        )
 
     if not kegiatan_all:
         raise HTTPException(
@@ -223,19 +236,32 @@ async def get_kegiatan(
 
     return kegiatan_dict
 
+
 @router.get("/kegiatan/export")
 async def export_kegiatan_to_excel(
     db: db_dependency,
     start_date: date,
     end_date: date,
-    # admin: admin_dependency
+    admin: admin_dependency,
+    name_kegiatan: Optional[str] = None,
 ):
-    kegiatan_all = (
-        db.query(Kegiatan)
-        .filter(Kegiatan.tanggal >= start_date)
-        .filter(Kegiatan.tanggal <= end_date)
-        .all()
-    )
+
+    if name_kegiatan:
+        kegiatan_all = (
+            db.query(Kegiatan)
+            .filter(Kegiatan.tanggal >= start_date)
+            .filter(Kegiatan.tanggal <= end_date)
+            .filter(Kegiatan.nama_kegiatan == name_kegiatan)
+            .all()
+        )
+
+    else:
+        kegiatan_all = (
+            db.query(Kegiatan)
+            .filter(Kegiatan.tanggal >= start_date)
+            .filter(Kegiatan.tanggal <= end_date)
+            .all()
+        )
 
     if not kegiatan_all:
         raise HTTPException(
@@ -246,20 +272,31 @@ async def export_kegiatan_to_excel(
     ws = wb.active
     ws.title = "Kegiatan"
 
-    headers = ["ID", "Nama Kegiatan", "Tanggal", "Tempat", "Deskripsi", "Gambar", "Nama Pamong", "NIP"]
+    headers = [
+        "ID",
+        "Nama Kegiatan",
+        "Tanggal",
+        "Tempat",
+        "Deskripsi",
+        "Gambar",
+        "Nama Pamong",
+        "NIP",
+    ]
     ws.append(headers)
 
     for kegiatan in kegiatan_all:
-        ws.append([
-            kegiatan.id,
-            kegiatan.nama_kegiatan,
-            kegiatan.tanggal,
-            kegiatan.tempat,
-            kegiatan.deskripsi,
-            kegiatan.gambar,
-            kegiatan.user.pamong.nama,
-            kegiatan.user.pamong.nip,
-        ])
+        ws.append(
+            [
+                kegiatan.id,
+                kegiatan.nama_kegiatan,
+                kegiatan.tanggal,
+                kegiatan.tempat,
+                kegiatan.deskripsi,
+                kegiatan.gambar,
+                kegiatan.user.pamong.nama,
+                kegiatan.user.pamong.nip,
+            ]
+        )
 
     # Save the workbook to an in-memory buffer
     with io.BytesIO() as buffer:
@@ -283,6 +320,7 @@ async def export_kegiatan_to_excel(
             )
 
     return {"file_url": f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{file_key}"}
+
 
 @router.get("/kegiatan/{kegiatan_id}")
 async def get_kegiatan_by_id(
@@ -339,3 +377,10 @@ async def get_kegiatan_by_pamong_id(
     ]
 
     return kegiatan_dict
+
+
+@router.get("/agenda/upcoming")
+def get_upcoming_agenda(db: db_dependency, admin: admin_dependency):
+    upcoming_agenda = db.query(Agenda).filter(Agenda.tanggal_mulai >= datetime.now()).all()
+
+    return upcoming_agenda
