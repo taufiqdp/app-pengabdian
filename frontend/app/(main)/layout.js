@@ -10,8 +10,8 @@ const geistSans = localFont({
 });
 
 export const metadata = {
-  title: "Desa Semanu",
-  description: "Desa Semanu",
+  title: "Lapor Semanu",
+  description: "Lapor Semanu",
 };
 
 export default function RootLayout({ children }) {
