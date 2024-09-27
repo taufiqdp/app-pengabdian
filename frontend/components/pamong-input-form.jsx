@@ -246,6 +246,15 @@ export default function PamongInputForm({
                 <div className="flex flex-col space-y-4">
                   <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
                     <div className="flex-1 space-y-2">
+                      <Label htmlFor="jabatan">NIP</Label>
+                      <Input
+                        id="nip"
+                        placeholder="NIP"
+                        name="nip"
+                        defaultValue={defaultValues?.nip}
+                      />
+                    </div>
+                    <div className="flex-1 space-y-2">
                       <Label htmlFor="jabatan">Jabatan</Label>
                       <Input
                         id="jabatan"

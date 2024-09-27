@@ -29,7 +29,7 @@ export default function TabelPamong({ dataPamong }) {
           <TableRow>
             <TableHead className="w-1/12">ID</TableHead>
             <TableHead className="w-2/12">Nama</TableHead>
-            <TableHead className="w-2/12">NIP</TableHead>
+            <TableHead className="w-2/12">NIK</TableHead>
             <TableHead className="w-2/12">Pekerjaan</TableHead>
             <TableHead className="w-2/12">Jabatan</TableHead>
             <TableHead className="w-2/12">Masa Jabatan</TableHead>
@@ -42,7 +42,7 @@ export default function TabelPamong({ dataPamong }) {
               <TableCell className="hover:underline">
                 <Link href={`/pamong/${pamong.id}`}>{pamong.nama}</Link>
               </TableCell>
-              <TableCell>{pamong.nip}</TableCell>
+              <TableCell>{pamong.nik}</TableCell>
               <TableCell>{pamong.pekerjaan}</TableCell>
               <TableCell>{pamong.jabatan}</TableCell>
               <TableCell>
