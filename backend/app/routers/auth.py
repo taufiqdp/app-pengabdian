@@ -20,7 +20,7 @@ ALGORITHM = "HS256"
 
 
 class UserCreateRequest(BaseModel):
-    nip: str
+    nik: str
     username: str
     password: str
     email: str
@@ -58,7 +58,7 @@ def authenticate_user(
         user = (
             db.query(User)
             .join(Pamong, User.pamong_id == Pamong.id)
-            .filter((Pamong.nip == username) | (User.username == username))
+            .filter((Pamong.nik == username) | (User.username == username))
             .first()
         )
 
@@ -95,7 +95,7 @@ async def create_user(user: UserCreateRequest, db: db_dependency):
             detail="Username already exists",
         )
 
-    pamong = db.query(Pamong).filter(Pamong.nip == user.nip).first()
+    pamong = db.query(Pamong).filter(Pamong.nik == user.nik).first()
     if pamong:
         new_user = User(
             username=user.username,
