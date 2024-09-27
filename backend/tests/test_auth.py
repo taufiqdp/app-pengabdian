@@ -36,13 +36,13 @@ def test_create_and_login_user(client, test_user, test_admin, test_pamong):
     assert "access_token" in response.json()
 
 
-def test_login_user_with_nip(client, test_user, test_admin, test_pamong):
+def test_login_user_with_nik(client, test_user, test_admin, test_pamong):
     token = create_and_login_admin(client, test_admin)
     create_pamong(client, test_pamong, token)
     create_user(client, test_user)
 
     response = client.post(
-        "/auth/token", data={"username": test_user["nip"], "password": "test"}
+        "/auth/token", data={"username": test_user["nik"], "password": "test"}
     )
     assert response.status_code == 200
     assert "access_token" in response.json()

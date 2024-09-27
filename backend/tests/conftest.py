@@ -46,7 +46,7 @@ def test_user():
     return {
         "username": "test",
         "password": "test",
-        "nip": "198703212011011005",
+        "nik": "3216012304891238",
         "email": "test@gmail.com",
     }
 
