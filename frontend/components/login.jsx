@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-// import pmLogo from "@/assets/pm-logo.png";
+import logoPm from "@/assets/logo-pm.jpg";
 import logoGkidul from "@/assets/logo-gkidul.jpg";
 import Image from "next/image";
 
@@ -123,22 +123,21 @@ export function Login({ loginAction }) {
           </p>
         </CardFooter>
       </Card>
-      <div className="flex gap-8 text-center">
-        {/* <Image
-          src={pmLogo}
-          alt="Pemdes Semanu"
-          width={40}
-          height={40}
-          style={{ borderRadius: "0%" }}
-        /> */}
+      <div className="grid grid-col-2 items-center gap-8 text-center">
+        <Image
+          src={logoPm}
+          alt="Logo PM"
+          width={60}
+          height={60}
+          className="border rounded-full col-start-1"
+        />
         <Image
           src={logoGkidul}
           alt="Pemdes Semanu"
           width={40}
           height={40}
           priority
-          className="rounded-full hidden"
-          style={{ borderRadius: "0%" }} // Changed to make the image rectangular
+          className="col-start-2"
         />
       </div>
     </div>
