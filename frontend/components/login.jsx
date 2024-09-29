@@ -49,6 +49,8 @@ export function Login({ loginAction }) {
     redirect("/dashboard");
   }
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="flex flex-col items-center justify-around h-screen">
       <div className="text-center">
@@ -117,7 +119,11 @@ export function Login({ loginAction }) {
         <CardFooter>
           <p className="text-sm text-muted-foreground text-center w-full">
             Butuh bantuan? Hubungi{" "}
-            <a href="https://wa.me/62895370855594" className="underline">
+            <a
+              href="https://wa.me/62895370855594"
+              target="_blank"
+              className="underline"
+            >
               dukungan IT
             </a>
           </p>
@@ -139,6 +145,15 @@ export function Login({ loginAction }) {
           priority
           className="col-start-2"
         />
+      </div>
+      <div className="md:mb-0 flex items-center">
+        <p>
+          &copy; {currentYear} Tim Pengabdian Informatika F{" "}
+          <a href="https://www.uty.ac.id" className="hover:underline">
+            UTY
+          </a>{" "}
+          21
+        </p>
       </div>
     </div>
   );
