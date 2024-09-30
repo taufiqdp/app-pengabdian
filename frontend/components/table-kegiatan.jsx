@@ -58,7 +58,7 @@ export default function TableKegiatan({ dataKegiatan }) {
   return (
     <>
       <Select onValueChange={handleSelectChange} defaultValue="Semua">
-        <SelectTrigger className="w-[400px]">
+        <SelectTrigger className="lg:w-[400px] sm:w-[300px] w-[200px]">
           <SelectValue placeholder="Pilih kegiatan" />
         </SelectTrigger>
         <SelectContent>
