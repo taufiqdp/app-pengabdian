@@ -234,8 +234,10 @@ async def reset_password(request: ResetPasswordRequest, db: db_dependency):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
         )
+    
+    print(payload)
 
-    user = db.query(User).filter(User.email == payload.get("sub")).first()
+    user = db.query(User).filter(User.username == payload.get("sub")).first()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
