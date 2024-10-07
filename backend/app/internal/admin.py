@@ -381,6 +381,8 @@ async def get_kegiatan_by_pamong_id(
 
 @router.get("/agenda/upcoming")
 def get_upcoming_agenda(db: db_dependency, admin: admin_dependency):
-    upcoming_agenda = db.query(Agenda).filter(Agenda.tanggal_mulai >= datetime.now()).all()
+    upcoming_agenda = (
+        db.query(Agenda).filter(Agenda.tanggal_mulai >= datetime.now()).all()
+    )
 
     return upcoming_agenda
