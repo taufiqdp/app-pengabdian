@@ -274,13 +274,13 @@ async def export_kegiatan_to_excel(
 
     headers = [
         "ID",
+        "Nama Pamong",
+        "NIK",
         "Nama Kegiatan",
         "Tanggal",
         "Tempat",
         "Deskripsi",
-        "Gambar",
-        "Nama Pamong",
-        "NIP",
+        "Link Gambar",
     ]
     ws.append(headers)
 
@@ -288,13 +288,13 @@ async def export_kegiatan_to_excel(
         ws.append(
             [
                 kegiatan.id,
+                kegiatan.user.pamong.nama,
+                kegiatan.user.pamong.nik,
                 kegiatan.nama_kegiatan,
                 kegiatan.tanggal,
                 kegiatan.tempat,
                 kegiatan.deskripsi,
                 kegiatan.gambar,
-                kegiatan.user.pamong.nama,
-                kegiatan.user.pamong.nip,
             ]
         )
 
