@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Json
-from fastapi import APIRouter, status, HTTPException, UploadFile, File
+from fastapi import APIRouter, status, HTTPException, UploadFile, File, BackgroundTasks
 from datetime import datetime
 from typing import Optional, Union
 from dotenv import load_dotenv
@@ -52,17 +52,14 @@ async def create_kegiatan(
     image_path = None
 
     if file:
-        image = await file.read()
         image_path = f"kegiatan/{uuid.uuid4()}_{file.filename}"
-
-        image_file = io.BytesIO(image)
 
         res = upload_file_to_s3(
             access_key_id=ACCESS_KEY_ID,
             secret_access_key=SECRET_ACCESS_KEY,
             bucket_name=BUCKET_NAME,
             object_key=image_path,
-            object=image_file,
+            object=file.file,
         )
 
         if not res:
@@ -111,12 +108,23 @@ async def get_kegiatan_by_id(
     return kegiatan
 
 
+def delete_old_image_background(old_image_path: str):
+    if old_image_path:
+        old_object_key = f"kegiatan/{old_image_path.split('/')[-1]}"
+        delete_file_from_s3(
+            access_key_id=ACCESS_KEY_ID,
+            secret_access_key=SECRET_ACCESS_KEY,
+            bucket_name=BUCKET_NAME,
+            object_key=old_object_key,
+        )
+
 @router.put("/{kegiatan_id}")
 async def update_kegiatan(
     kegiatan_id: int,
     kegiatan: Json[KegiatanCreateRequest],
     db: db_dependency,
     user: user_dependency,
+    background_tasks: BackgroundTasks,
     file: Union[UploadFile, str] = File(None),
 ):
     kegiatan_data = db.query(Kegiatan).filter(Kegiatan.id == kegiatan_id).first()
@@ -137,31 +145,17 @@ async def update_kegiatan(
     kegiatan_data.tempat = kegiatan.tempat
     kegiatan_data.deskripsi = kegiatan.deskripsi
 
+    old_image_path = kegiatan_data.gambar
+
     if file:
-        if kegiatan_data.gambar:
-            res = delete_file_from_s3(
-                access_key_id=ACCESS_KEY_ID,
-                secret_access_key=SECRET_ACCESS_KEY,
-                bucket_name=BUCKET_NAME,
-                object_key=f"kegiatan/{kegiatan_data.gambar.split('/')[-1]}",
-            )
-
-            if not res:
-                raise HTTPException(
-                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                )
-
-        image = await file.read()
         image_path = f"kegiatan/{uuid.uuid4()}_{file.filename}"
-
-        image_file = io.BytesIO(image)
 
         res = upload_file_to_s3(
             access_key_id=ACCESS_KEY_ID,
             secret_access_key=SECRET_ACCESS_KEY,
             bucket_name=BUCKET_NAME,
             object_key=image_path,
-            object=image_file,
+            object=file.file,
         )
 
         if not res:
@@ -171,6 +165,9 @@ async def update_kegiatan(
             )
 
         kegiatan_data.gambar = f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}"
+
+        # Add background task to delete old image
+        background_tasks.add_task(delete_old_image_background, old_image_path)
 
     db.commit()
     db.refresh(kegiatan_data)
