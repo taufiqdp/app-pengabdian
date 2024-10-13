@@ -74,7 +74,7 @@ async def create_pamong(
     db: db_dependency,
     file: Union[UploadFile, str] = File(None),
 ):
-    if db.query(Pamong).filter(Pamong.nip == pamong.nip).first():
+    if db.query(Pamong).filter(Pamong.nik == pamong.nik).first():
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Pamong already exists"
         )
