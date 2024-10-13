@@ -18,7 +18,7 @@ class Pamong(Base):
     id = Column(Integer, primary_key=True, index=True)
     nama = Column(String(100), nullable=False)
     nik = Column(String(16), unique=True, nullable=False)
-    nip = Column(String(18), unique=True, nullable=True)
+    nip = Column(String(18), unique=False, nullable=True)
     tempat_lahir = Column(String(50), nullable=True)
     tanggal_lahir = Column(Date, nullable=True)
     alamat = Column(String, nullable=True)
