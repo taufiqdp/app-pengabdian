@@ -103,7 +103,7 @@ async def create_pamong(
 
     new_pamong = Pamong(
         **pamong.model_dump(),
-        gambar=f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}" if file else None,
+        gambar=f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/{image_path}" if file else f"{S3_ENDPOINT_URL}/{BUCKET_NAME}/profile/profile.png",
     )
 
     db.add(new_pamong)
@@ -141,7 +141,7 @@ async def update_pamong(
     pamong_to_update = user_data.pamong
 
     if file:
-        if pamong_to_update.gambar:
+        if pamong_to_update.gambar and pamong_to_update.gambar.split("/")[-1] != "profile.png":
             res = delete_file_from_s3(
                 access_key_id=ACCESS_KEY_ID,
                 secret_access_key=SECRET_ACCESS_KEY,

@@ -118,7 +118,7 @@ async def update_pamong(
         )
 
     if file:
-        if pamong_data.gambar:
+        if pamong_data.gambar and pamong_data.gambar.split("/")[-1] != "profile.png":
             res = delete_file_from_s3(
                 access_key_id=ACCESS_KEY_ID,
                 secret_access_key=SECRET_ACCESS_KEY,
@@ -165,7 +165,7 @@ async def update_pamong(
 async def delete_pamong(db: db_dependency, pamong_id: int, admin: admin_dependency):
     pamong = db.query(Pamong).filter(Pamong.id == pamong_id).first()
 
-    if pamong.gambar:
+    if pamong.gambar and pamong.gambar.split("/")[-1] != "profile.png":
         res = delete_file_from_s3(
             access_key_id=ACCESS_KEY_ID,
             secret_access_key=SECRET_ACCESS_KEY,
